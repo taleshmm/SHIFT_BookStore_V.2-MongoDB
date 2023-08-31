@@ -1,5 +1,5 @@
 class Category:
-    def __init__(self, id: int, name: str):
+    def __init__(self, name: str, id: int=0):
         self.__id: int = id
         self.__name: str = name
 

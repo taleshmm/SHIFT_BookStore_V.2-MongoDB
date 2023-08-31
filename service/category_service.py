@@ -57,9 +57,8 @@ class CategoryService:
     print('\nAdicionando categoria...')
     
     try:
-      id = self.__category_dao.getLastId() + 1
       name = input('Digite o nome da categoria: ').lower()
-      new_category = Category(id, name)
+      new_category = Category(name)
       self.__category_dao.create(new_category)
       print('Categoria adicionada com sucesso!')
     except Exception as e:
