@@ -1,5 +1,5 @@
 class Author:
-    def __init__(self, id: int, name: str, email: str, phone: str, bio: str):
+    def __init__(self, name: str, email: str, phone: str, bio: str, id: int=0):
         self.__id: int = id
         self.__name: str = name
         self.__email: str = email

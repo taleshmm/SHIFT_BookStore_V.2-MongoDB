@@ -48,7 +48,7 @@ class AuthorService:
           if len(authors) == 0:
              print('Nenhum autor(a) encontrada!')
           for author in authors:
-             print(f'{author.id} | {author.name.capitalize()} | {author.email} | {showPhone(author.phone)} | {author.bio}')
+             print(f'{author.id} | {author.name.title()} | {author.email} | {showPhone(author.phone)} | {author.bio if author.bio != None else "Sem dados" }')
        except Exception as e:
          print(f'Erro ao exibir as autores(as)! - {e}')
          return
@@ -59,13 +59,12 @@ class AuthorService:
     def add(self):
       print('\nAdicionando autor(a)')
       try:
-        id = self.__author_dao.getLastId() + 1
-        name = input("Digite o nome: ").lower()
+        name = input("Digite o nome: ").title()
         email = input("Digite o e-mail: ").lower()
         phone  = clearPhone(input("Digite o telefone: "))
         bio = input("Digite a bio: ")
 
-        new_author = Author(id, name, email, phone, bio)
+        new_author = Author(name, email, phone, bio)
         self.__author_dao.create(new_author)
         print('Autor(a) adicionado(a) com sucesso!')
       except Exception as e:
@@ -94,7 +93,7 @@ class AuthorService:
           id = int(input('Digite o ID do autor(a): '))
           author = self.__author_dao.getById(id)
           if author is not None:
-             print(f'ID: {author.id} | Nome: {author.name.capitalize()} \nE-mail: {author.email} | Telefone: {showPhone(author.phone)}\nBio: {author.bio}')
+             print(f'ID: {author.id} | Nome: {author.name.title()} \nE-mail: {author.email} | Telefone: {showPhone(author.phone)}\nBio: {author.bio if author.bio != None else "Sem dados"}')
           else:
              print('Autor(a) não encontrado.')
        except Exception as e:
@@ -107,10 +106,10 @@ class AuthorService:
     def showByName(self):
       print('\nAutor(a) por nome...')
       try:
-         name = input('Digite o ID do autor(a): ').lower()
+         name = input('Digite o ID do autor(a): ')
          author = self.__author_dao.getByName(name)
          if author is not None:
-           print(f'ID: {author.id} | Nome: {author.name.capitalize()} \nE-mail: {author.email} | Telefone: {showPhone(author.phone)}\nBio: {author.bio}')
+           print(f'ID: {author.id} | Nome: {author.name.title()} \nE-mail: {author.email} | Telefone: {showPhone(author.phone)}\nBio: {author.bio if author.bio != None else "Sem dados"}')
          else:
            print('Autor(a) não encontrado.')
       except Exception as e:
@@ -125,7 +124,7 @@ class AuthorService:
          email = input('Digite o ID do autor(a): ').lower()
          author = self.__author_dao.getByEmail(email)
          if author is not None:
-           print(f'ID: {author.id} | Nome: {author.name.capitalize()} \nE-mail: {author.email} | Telefone: {showPhone(author.phone)}\nBio: {author.bio}')
+           print(f'ID: {author.id} | Nome: {author.name.title()} \nE-mail: {author.email} | Telefone: {showPhone(author.phone)}\nBio: {author.bio if author.bio != None else "Sem dados"}')
          else:
            print('Autor(a) não encontrado.')
       except Exception as e:

@@ -1,51 +1,77 @@
 from model.author import Author
+from database.connection_factory import ConnectionFactory
 
 class AuthorDAO:
   def __init__ (self):
-      self.__authors: list[Author] = list()
+      self.__connection_factory = ConnectionFactory()
   
   def getAll(self) ->  list[Author]:
-     return self.__authors
+     connect = self.__connection_factory.get_connection()
+     cursor = connect.cursor()
+     cursor.execute('SELECT * FROM authors')
+     rows = cursor.fetchall()
+     cursor.close()
+     connect.close()
+     authors = list()
+     for row in rows:
+        authorRow = Author(row[1], row[2], row[3], row[4], row[0])
+        authors.append(authorRow)
+     
+     return authors
+        
   
   def create(self, author: Author) -> None:
-     self.__authors.append(author)
+     connect = self.__connection_factory.get_connection()
+     cursor = connect.cursor()
+     cursor.execute("INSERT INTO authors (name, email, phone, bio) VALUES (%s, %s, %s, %s)", (author.name, author.email, author.phone, author.bio))
+     connect.commit()
+     cursor.close()
+     connect.close()
 
   def delete(self, author_id) -> bool:
-     find = False
-     for i in self.__authors:
-        if i.id == author_id:
-          index = self.__authors.index(i)
-          del self.__authors[index]
-          find = True
-          break
-     return find
+     connect = self.__connection_factory.get_connection()
+     cursor = connect.cursor()
+     cursor.execute("DELETE FROM authors WHERE id = %s", (author_id,))
+     rows_deleted = cursor.rowcount
+     connect.commit()
+     cursor.close()
+     connect.close()
+     if rows_deleted > 0:
+        return True
+     return False
   
   def getById(self, author_id) -> Author:
+     connect = self.__connection_factory.get_connection()
+     cursor = connect.cursor()
+     cursor.execute("SELECT * FROM authors WHERE id = %s", (author_id,))
+     row = cursor.fetchone()
+     cursor.close()
+     cursor.close()
      find_author = None
-     for i in self.__authors:
-        if i.id == author_id:
-           find_author = i
-           break
+     if row:
+        find_author = Author(row[1], row[2], row[3], row[4], row[0])
      return find_author
-
-  def getLastId(self) -> int:
-    if len(self.__authors) != 0:
-      return self.__authors[-1].id
-    else:
-      return 0
-  
+     
   def getByName(self, author_name: str) -> Author:
-       find_author = None
-       for i in self.__authors:
-          if i.name == author_name:
-             find_author = i
-             break
-       return find_author
+     connect = self.__connection_factory.get_connection()
+     cursor = connect.cursor()
+     cursor.execute("SELECT * FROM authors WHERE name = %s", (author_name,))
+     row = cursor.fetchone()
+     cursor.close()
+     cursor.close()
+     find_author = None
+     if row:
+        find_author = Author(row[1], row[2], row[3], row[4], row[0])
+     return find_author
   
   def getByEmail(self, author_email: str) -> Author:
-       find_author = None
-       for i in self.__authors:
-          if i.email == author_email:
-             find_author = i
-             break
-       return find_author
+     connect = self.__connection_factory.get_connection()
+     cursor = connect.cursor()
+     cursor.execute("SELECT * FROM authors WHERE email = %s", (author_email,))
+     row = cursor.fetchone()
+     cursor.close()
+     cursor.close()
+     find_author = None
+     if row:
+        find_author = Author(row[1], row[2], row[3], row[4], row[0])
+     return find_author
