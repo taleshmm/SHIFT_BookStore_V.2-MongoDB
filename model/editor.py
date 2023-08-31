@@ -1,5 +1,5 @@
 class Editor:
-    def __init__(self, id: int, name: str, address: str, phone: str):
+    def __init__(self, name: str, address: str, phone: str, id: int=0):
         self.__id: int = id
         self.__name: str = name
         self.__address: str = address

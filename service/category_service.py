@@ -46,7 +46,7 @@ class CategoryService:
         print('Nenhuma categoria encontrada!')
         
       for category in categorys:
-        print(f'{category.id} | {category.name.capitalize()}')
+        print(f'{category.id} | {category.name.title()}')
     except Exception as e:
       print(f'Erro ao exibir as categorias! - {e}')
       return
@@ -57,7 +57,7 @@ class CategoryService:
     print('\nAdicionando categoria...')
     
     try:
-      name = input('Digite o nome da categoria: ').lower()
+      name = input('Digite o nome da categoria: ').title()
       new_category = Category(name)
       self.__category_dao.create(new_category)
       print('Categoria adicionada com sucesso!')
@@ -88,7 +88,7 @@ class CategoryService:
       id = int(input('Digite o ID da categoria: '))
       category = self.__category_dao.getById(id)
       if category is not None: 
-        print(f'ID: {category.id} | Nome: {category.name.capitalize()}')
+        print(f'ID: {category.id} | Nome: {category.name.title()}')
       else:
         print('Categoria não encontrada')
     except Exception as e:
@@ -101,10 +101,10 @@ class CategoryService:
     print('\nCategoria por nome...')
     
     try:
-      name = input('Digite o nome da categoria: ').lower()
+      name = input('Digite o nome da categoria: ').title()
       category = self.__category_dao.getByName(name)
       if category is not None: 
-        print(f'ID: {category.id} | Nome: {category.name.capitalize()}')
+        print(f'ID: {category.id} | Nome: {category.name.title()}')
       else:
         print('Categoria não encontrada')
     except Exception as e:

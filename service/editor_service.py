@@ -47,7 +47,7 @@ class EditorService:
          else:
           print('ID | Nome  | Telefone |   Endereço')
           for editor in editors:
-              print(f'{editor.id} | {editor.name.capitalize()} | {showPhone(editor.phone)} | {editor.address.capitalize()}')
+              print(f'{editor.id} | {editor.name.title()} | {showPhone(editor.phone)} | {editor.address.title()}')
       except Exception as e:
         print(f'Erro ao exibir as editoras! - {e}')
         return
@@ -57,12 +57,10 @@ class EditorService:
     def add(self):
        print('\nAdicionando editora...')
        try:
-          id = self.__editor_dao.getLastId() + 1
-          name = input('Digite o nome da editora: ').lower()
+          name = input('Digite o nome da editora: ').title()
           phone = input('Digite o telefone: ')
-          address = input('Digite o endereço: ').lower()
-
-          new_editor = Editor(id, name, address, clearPhone(phone))
+          address = input('Digite o endereço: ').title()
+          new_editor = Editor(name, address, clearPhone(phone))
           self.__editor_dao.create(new_editor)
           print('Editora adicionada com sucesso!')
        except Exception as e:
@@ -87,12 +85,11 @@ class EditorService:
 
     def showById(self):
        print('\Editora por Id...')
-
        try:
           id = int(input('Digite o ID da editora: '))
           editor = self.__editor_dao.getById(id)
           if editor is not None:
-             print(f'ID: {editor.id} | Nome: {editor.name.capitalize()} | {showPhone(editor.phone)}')
+             print(f'ID: {editor.id} | Nome: {editor.name.title()} | {showPhone(editor.phone)}')
           else:
              print('Editora não encontrada! ')
        except Exception as e:
@@ -105,10 +102,10 @@ class EditorService:
       print('\Editora por nome...')
     
       try:
-        name = input('Digite o nome da editora: ').lower()
+        name = input('Digite o nome da editora: ').title()
         editor = self.__editor_dao.getByName(name)
         if editor is not None: 
-           print(f'ID: {editor.id} | Nome: {editor.name.capitalize()} | {showPhone(editor.phone)}')
+           print(f'ID: {editor.id} | Nome: {editor.name.title()} | {showPhone(editor.phone)}')
         else:
           print('Editora não encontrada!')
       except Exception as e:
