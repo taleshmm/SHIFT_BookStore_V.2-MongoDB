@@ -42,7 +42,7 @@ class CategoryDAO:
     def getById(self, category_id: int) -> Category:
         connect = self.__connection_factory.get_connection()
         cursor = connect.cursor()
-        cursor.execute("SELECT * FROM categories WHERE id = %s", (category_id))
+        cursor.execute("SELECT * FROM categories WHERE id = %s", (category_id,))
         row = cursor.fetchone()
         find_category = None
         if row:

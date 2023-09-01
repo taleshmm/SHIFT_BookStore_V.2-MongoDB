@@ -54,12 +54,12 @@ class BookService:
           if len(books) == 0:
              print('Nenhum autor(a) encontrada!')
           for book in books:
-             print(f'''ID: {book.id} | Título: {book.title.capitalize()} | Ano: {book.year} | Páginas: {book.pages}
-   Resumo: {book.summary}
-   Isbn: {book.isbn}
-   Categoria: {book.category.name.capitalize()}
-   Editora: {book.editor.name.capitalize()}
-   Autor(a): {book.author.name.capitalize()}''')
+             print(f'''ID: {book.id} | Título: {book.title.title()} | Ano: {book.year} | Páginas: {book.pages}
+Resumo: {book.summary}
+Isbn: {book.isbn}
+Categoria: {self.__category_dao.getById(book.category).name.title()}
+Editora: {self.__editor_dao.getById(book.editor).name.title()}
+Autor(a): {self.__author_dao.getById(book.author).name.title()}''')
        except Exception as e:
          print(f'Erro ao exibir as autores(as)! - {e}')
          return
@@ -70,9 +70,8 @@ class BookService:
     def add(self):
       print('\nAdicionando autor(a)')
       try:
-        id = self.__book_dao.getLastId() + 1
-        title = input("Digite o título: ").lower()
-        summary = input("Digite a sinopse: ").lower()
+        title = input("Digite o título: ").title()
+        summary = input("Digite a sinopse: ").capitalize()
         year  = int(input("Digite o ano: "))
         pages = int(input("Digite a páginas: "))
         isbn = input("Digite o isbn: ")
@@ -117,7 +116,7 @@ class BookService:
          id = int(input('Digite o ID do autor(a): '))
          author_select: Author = self.__author_dao.getById(id)
          
-        new_book = Book(id, title, summary, year, pages, isbn, category_select, editor_select, author_select)
+        new_book = Book(title, isbn , year, pages, summary, category_select.id, editor_select.id, author_select.id)
         self.__book_dao.create(new_book)    
         print('Livro adicionado com sucesso!')
       except Exception as e:
@@ -146,12 +145,12 @@ class BookService:
           id = int(input('Digite o ID do autor(a): '))
           book = self.__book_dao.getById(id)
           if book is not None:
-            print(f'''ID: {book.id} | Título: {book.title.capitalize()} | Ano: {book.year} | Páginas: {book.pages}
-   Resumo: {book.summary}
-   Isbn: {book.isbn}
-   Categoria: {book.category.name.capitalize()}
-   Editora: {book.editor.name.capitalize()}
-   Autor(a): {book.author.name.capitalize()}''')
+            print(f'''ID: {book.id} | Título: {book.title.title()} | Ano: {book.year} | Páginas: {book.pages}
+Resumo: {book.summary}
+Isbn: {book.isbn}
+Categoria: {self.__category_dao.getById(book.category).name.title()}
+Editora: {self.__editor_dao.getById(book.editor).name.title()}
+Autor(a): {self.__author_dao.getById(book.author).name.title()}''')
           else:
              print('Livro não encontrado.')
        except Exception as e:
@@ -164,15 +163,15 @@ class BookService:
     def showByTitle(self):
       print('\nLivro por título...')
       try:
-         title = input('Digite o titulo do livro: ').lower()
+         title = input('Digite o titulo do livro: ')
          book = self.__book_dao.getByTitle(title)
          if book is not None:
           print(f'''ID: {book.id} | Título: {book.title.capitalize()} | Ano: {book.year} | Páginas: {book.pages}
-   Resumo: {book.summary}
-   Isbn: {book.isbn}
-   Categoria: {book.category.name.capitalize()}
-   Editora: {book.editor.name.capitalize()}
-   Autor(a): {book.author.name.capitalize()}''')
+ Resumo: {book.summary}
+ Isbn: {book.isbn}
+ Categoria: {self.__category_dao.getById(book.category).name.title()}
+ Editora: {self.__editor_dao.getById(book.editor).name.title()}
+ Autor(a): {self.__author_dao.getById(book.author).name.title()}''')
          else:
            print('Livro não encontrado.')
       except Exception as e:
