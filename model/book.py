@@ -3,7 +3,7 @@ from .category import Category
 from .editor import Editor
 
 class Book:
-    def __init__(self, title: str, isbn: str, year: int, pages: int,  summary: str, category: Category, editor: Editor, author: Author, id: int=0):
+    def __init__(self, title: str, isbn: str, pages: int, year: int,  summary: str, category: Category, editor: Editor, author: Author, id: int=0):
         self.__id: int = id
         self.__title: str = title
         self.__summary: str = summary

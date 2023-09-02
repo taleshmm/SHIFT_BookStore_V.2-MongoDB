@@ -62,3 +62,11 @@ class CategoryDAO:
         cursor.close()
         connect.close()
         return find_category
+    
+    def create_many(self, categories):
+        connect = self.__connection_factory.get_connection()
+        cursor = connect.cursor()
+        cursor.executemany("INSERT INTO categories (name) VALUES (%s)", categories)
+        connect.commit()
+        cursor.close()
+        connect.close()

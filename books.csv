@@ -1,7 +1,8 @@
 title,isbn,year,pages,summary,category,editor,author
-Livro 1,1234567890,2000,300,"Este é o resumo do Livro 1. Um livro interessante sobre um tópico fascinante.",Ficção Científica,Editora A,Autor 1
-Livro 2,9876543210,1995,250,"Este é o resumo do Livro 2. Um romance emocionante que cativará os leitores.",Romance,Editora B,Autor 2
-Livro 3,5551234567,2010,400,"Este é o resumo do Livro 3. Um livro de não-ficção que explora um assunto importante.",Não-Ficção,Editora C,Autor 3
-Livro 4,7778889999,2022,350,"Este é o resumo do Livro 4. Um mistério envolvente que manterá os leitores intrigados.",Mistério,Editora D,Autor 4
-Livro 5,1112223333,2015,280,"Este é o resumo do Livro 5. Uma obra de fantasia que levará os leitores a um mundo mágico.",Fantasia,Editora E,Autor 5
+Amor nas Estrelas,1234567890,2000,300,"Uma história de amor épica que se desenrola no espaço sideral.",9,10,12
+O Segredo das Fadas,9876543210,1995,250,"Aventuras emocionantes de uma jovem em um reino mágico habitado por fadas.",10,11,13
+Explorando o Cosmos,5551234567,2010,400,"Uma jornada pela astronomia e a exploração do universo.",12,12,14
+Enigmas da Meia-Noite,7778889999,2022,350,"Um detetive astuto enfrenta uma série de mistérios noturnos.",13,13,15
+A Espada da Magia,1112223333,2015,280,"Um jovem herói embarca em uma missão para salvar seu mundo de uma ameaça mágica.",3,14,8
+
 

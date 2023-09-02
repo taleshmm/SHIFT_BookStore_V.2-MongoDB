@@ -61,3 +61,11 @@ class BookDAO:
        if row:
            book_found = Book(row[1], row   [2], row[3], row[4], row[5], row [6], row[7], row[8], row[0])
        return book_found
+   
+    def create_many(self, books):
+        connect = self.__connection_factory.get_connection()
+        cursor = connect.cursor()
+        cursor.executemany("INSERT INTO books (title, isbn, pages, yearBook, summary, category_id, publisher_id, author_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", books)
+        connect.commit()
+        cursor.close()
+        connect.close()

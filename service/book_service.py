@@ -29,6 +29,7 @@ class BookService:
      5 - Pesquisar por título
      6 - Ler de arquivo CSV
      7 - Exportar para CSV
+     8 - Inserir CSV no banco
      0 - Voltar ao menu anterior''')
         
         selection = input('Digite a opção: ')
@@ -48,6 +49,8 @@ class BookService:
            self.read_csv()
         elif selection == '7':
            self.create_csv()
+        elif selection == '8':
+           self.insert_many()
         else:
            print('Opção inválida! Por favor, tente novamente!')
      
@@ -59,7 +62,7 @@ class BookService:
        try:
           books = self.__book_dao.getAll()
           if len(books) == 0:
-             print('Nenhum autor(a) encontrada!')
+             print('Nenhum livro encontrado!')
           for book in books:
              print(f'''ID: {book.id} | Título: {book.title.title()} | Ano: {book.year} | Páginas: {book.pages}
 Resumo: {book.summary}
@@ -68,7 +71,7 @@ Categoria: {self.__category_dao.getById(book.category).name.title()}
 Editora: {self.__editor_dao.getById(book.editor).name.title()}
 Autor(a): {self.__author_dao.getById(book.author).name.title()}''')
        except Exception as e:
-         print(f'Erro ao exibir as autores(as)! - {e}')
+         print(f'Erro ao exibir os livros! - {e}')
          return
     
        input('Pressione uma tecla para continuar... ')
@@ -209,4 +212,17 @@ Autor(a): {self.__author_dao.getById(book.author).name.title()}''')
          books = self.__book_dao.getAll()
          create_csv_book(name_file, books)
       except Exception as e:
-         print(f'Error ao criar arquivo CSV - {e}')   
+         print(f'Error ao criar arquivo CSV - {e}')
+         
+    def insert_many(self):
+       try:
+         name_file = input('Digite o nome do arquivo CSV: ')
+         books_csv = read_csv_book(name_file)
+         list_books = list()
+         print('Inserindo em banco...\n')
+         for bk in books_csv:
+            list_books.append((bk.title, bk.isbn, bk.pages, bk.year, bk.summary, bk.category, bk.editor, bk.author))
+         self.__book_dao.create_many(list_books)
+         print('Dados inseridos com sucesso.')
+       except Exception as e:
+         print(f'Error ao inserir dados no banco - {e}')    

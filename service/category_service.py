@@ -19,6 +19,7 @@ class CategoryService:
      5 - Pesquisar categoria por nome
      6 - Ler de arquivo CSV
      7 - Exportar para CSV
+     8 - Inserir CSV no banco
      0 - Voltar ao menu anterior''')
 
      selection = input('Digite a opção: ')
@@ -39,6 +40,8 @@ class CategoryService:
        self.read_csv()
      elif selection == '7':
        self.create_csv()
+     elif selection == '8':
+       self.insert_many()
      else:
        print('Opção inválida! Por favor, tente novamente!')
      
@@ -138,3 +141,16 @@ class CategoryService:
       create_csv_category(name_file, categories)
     except Exception as e:
       print(f'Error ao criar arquivo CSV - {e}')
+      
+  def insert_many(self):
+     try:
+      name_file = input('Digite o nome do arquivo CSV: ')
+      categories_csv = read_csv_category(name_file)
+      list_categories = list()
+      print('Inserindo em banco...\n')
+      for cat in categories_csv:
+        list_categories.append((cat.name,))
+      self.__category_dao.create_many(list_categories)
+      print('Dados inseridos com sucesso.')
+     except Exception as e:
+       print(f'Error ao inserir dados no banco - {e}')

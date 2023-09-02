@@ -20,6 +20,7 @@ class EditorService:
      5 - Pesquisar editora por nome
      6 - Ler de arquivo CSV
      7 - Exportar para CSV
+     8 - Inserir CSV no banco
      0 - Voltar ao menu anterior''')
         
         selection = input('Digite a opção: ')
@@ -40,6 +41,8 @@ class EditorService:
            self.read_csv()
         elif selection == '7':
            self.create_csv()
+        elif selection == '8':
+           self.insert_many()
         else:
            print('Opção inválida! Por favor, tente novamente!')
      
@@ -140,4 +143,15 @@ class EditorService:
       except Exception as e:
         print(f'Error ao criar arquivo CSV - {e}')
      
-      
+    def insert_many(self):
+     try:
+      name_file = input('Digite o nome do arquivo CSV: ')
+      editors_csv = read_csv_editor(name_file)
+      list_editors = list()
+      print('Inserindo em banco...\n')
+      for ed in editors_csv:
+        list_editors.append((ed.name, ed.address, ed.phone))
+      self.__editor_dao.create_many(list_editors)
+      print('Dados inseridos com sucesso.')
+     except Exception as e:
+       print(f'Error ao inserir dados no banco - {e}') 

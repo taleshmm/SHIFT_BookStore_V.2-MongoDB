@@ -21,6 +21,7 @@ class AuthorService:
      6 - Pesquisar autor(a) por e-mail
      7 - Ler de arquivo CSV
      8 - Exportar para CSV
+     9 - Inserir CSV no banco
      0 - Voltar ao menu anterior''')
         
         selection = input('Digite a opção: ')
@@ -42,6 +43,8 @@ class AuthorService:
            self.read_csv()
         elif selection == '8':
            self.create_csv()
+        elif selection == '9':
+           self.insert_many()
         else:
            print('Opção inválida! Por favor, tente novamente!')
      
@@ -156,5 +159,19 @@ class AuthorService:
          create_csv_author(name_file, authors)
       except Exception as e:
          print(f'Error ao criar arquivo CSV - {e}')
+         
+    def insert_many(self):
+       try:
+         name_file = input('Digite o nome do arquivo CSV: ')
+         authors_csv = read_csv_author(name_file)
+         list_authors = list()
+         print('Inserindo em banco...\n')
+         for at in authors_csv:
+            list_authors.append((at.name, at.email, at.phone, at.bio))
+         self.__author_dao.create_many(list_authors)
+         print('Dados inseridos com sucesso.')
+       except Exception as e:
+         print(f'Error ao inserir dados no banco - {e}') 
+     
 
     

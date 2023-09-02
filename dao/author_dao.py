@@ -75,3 +75,11 @@ class AuthorDAO:
      if row:
         find_author = Author(row[1], row[2], row[3], row[4], row[0])
      return find_author
+  
+  def create_many(self, authors):
+        connect = self.__connection_factory.get_connection()
+        cursor = connect.cursor()
+        cursor.executemany("INSERT INTO authors (name, email, phone, bio) VALUES (%s, %s, %s, %s)", authors)
+        connect.commit()
+        cursor.close()
+        connect.close()

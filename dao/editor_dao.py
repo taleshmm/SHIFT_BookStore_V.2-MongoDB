@@ -63,3 +63,11 @@ class EditorDAO:
         if row:
            find_editor = Editor(row[1], row[2], row[3], row[0])
         return find_editor   
+    
+    def create_many(self, editors):
+        connect = self.__connection_factory.get_connection()
+        cursor = connect.cursor()
+        cursor.executemany("INSERT INTO publishers (name, address, phone) VALUES (%s, %s, %s)", editors)
+        connect.commit()
+        cursor.close()
+        connect.close()
