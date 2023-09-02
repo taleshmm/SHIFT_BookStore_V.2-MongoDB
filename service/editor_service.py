@@ -1,6 +1,7 @@
 from dao.editor_dao import EditorDAO
 from model.editor import Editor
 from utils.util import showPhone, clearPhone
+from utils.csv_processor import read_csv_editor, create_csv_editor
 
 class EditorService:
     def __init__(self):
@@ -17,6 +18,8 @@ class EditorService:
      3 - Excluir editora
      4 - Ver editora por Id
      5 - Pesquisar editora por nome
+     6 - Ler de arquivo CSV
+     7 - Exportar para CSV
      0 - Voltar ao menu anterior''')
         
         selection = input('Digite a opção: ')
@@ -33,6 +36,10 @@ class EditorService:
            self.showById()
         elif selection == '5':
            self.showByName()
+        elif selection == '6':
+           ...
+        elif selection == '7':
+           ...
         else:
            print('Opção inválida! Por favor, tente novamente!')
      
@@ -114,4 +121,5 @@ class EditorService:
       
       input('Pressione uma tecla para continuar... ')
 
-
+    def read_csv(self):
+      ...
