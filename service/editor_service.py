@@ -37,9 +37,9 @@ class EditorService:
         elif selection == '5':
            self.showByName()
         elif selection == '6':
-           ...
+           self.read_csv()
         elif selection == '7':
-           ...
+           self.create_csv()
         else:
            print('Opção inválida! Por favor, tente novamente!')
      
@@ -96,7 +96,7 @@ class EditorService:
           id = int(input('Digite o ID da editora: '))
           editor = self.__editor_dao.getById(id)
           if editor is not None:
-             print(f'ID: {editor.id} | Nome: {editor.name.title()} | {showPhone(editor.phone)}')
+             print(f'ID: {editor.id} | Nome: {editor.name.title()} | Endereço: {editor.address} | {showPhone(editor.phone)}')
           else:
              print('Editora não encontrada! ')
        except Exception as e:
@@ -112,7 +112,7 @@ class EditorService:
         name = input('Digite o nome da editora: ').title()
         editor = self.__editor_dao.getByName(name)
         if editor is not None: 
-           print(f'ID: {editor.id} | Nome: {editor.name.title()} | {showPhone(editor.phone)}')
+           print(f'ID: {editor.id} | Nome: {editor.name.title()} | Endereço: {editor.address} | {showPhone(editor.phone)}')
         else:
           print('Editora não encontrada!')
       except Exception as e:
@@ -122,4 +122,22 @@ class EditorService:
       input('Pressione uma tecla para continuar... ')
 
     def read_csv(self):
-      ...
+      name_file = input('Digite o nome do arquivo CSV (Precisa estar na raiz do projeto). \n -> ')
+      print('Listando do arquivo CSV...\n')
+      try:
+        editors = read_csv_editor(name_file)
+        for editor in editors: 
+           print(f'Nome: {editor.name.title()} | Endereço: {editor.address} | {showPhone(editor.phone)}')
+      except Exception as e:
+        print(f'Error ao exibir arquivo CSV - {e}')
+   
+    def create_csv(self):
+      name_file = input('Digite o nome do arquivo CSV: ')
+      print('Criando arquivo CSV...\n')
+      try:
+        editors = self.__editor_dao.getAll()
+        create_csv_editor(name_file, editors)
+      except Exception as e:
+        print(f'Error ao criar arquivo CSV - {e}')
+     
+      

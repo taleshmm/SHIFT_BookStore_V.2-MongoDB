@@ -1,6 +1,7 @@
 from dao.author_dao import AuthorDAO
 from model.author import Author
 from utils.util import showPhone, clearPhone
+from utils.csv_processor import read_csv_author, create_csv_author
 
 class AuthorService:
     def __init__(self):
@@ -18,6 +19,8 @@ class AuthorService:
      4 - Ver autor(a) por Id
      5 - Pesquisar autor(a) por nome
      6 - Pesquisar autor(a) por e-mail
+     7 - Ler de arquivo CSV
+     8 - Exportar para CSV
      0 - Voltar ao menu anterior''')
         
         selection = input('Digite a opção: ')
@@ -35,6 +38,10 @@ class AuthorService:
            self.showByName()
         elif selection == '6':
            self.showByEmail()
+        elif selection == '7':
+           self.read_csv()
+        elif selection == '8':
+           self.create_csv()
         else:
            print('Opção inválida! Por favor, tente novamente!')
      
@@ -54,7 +61,6 @@ class AuthorService:
          return
     
        input('Pressione uma tecla para continuar... ')
-
 
     def add(self):
       print('\nAdicionando autor(a)')
@@ -102,7 +108,6 @@ class AuthorService:
     
        input('Pressione uma tecla para continuar...' )
 
-
     def showByName(self):
       print('\nAutor(a) por nome...')
       try:
@@ -132,3 +137,24 @@ class AuthorService:
         return   
     
       input('Pressione uma tecla para continuar...' )
+          
+    def read_csv(self):
+      name_file = input('Digite o nome do arquivo CSV (Precisa estar na raiz do projeto). \n -> ')
+      print('Listando do arquivo CSV...\n')
+      try:
+        authors = read_csv_author(name_file)
+        for author in authors: 
+           print(f'ID: {author.id} | Nome: {author.name.title()} \nE-mail: {author.email} | Telefone: {showPhone(author.phone)}\nBio: {author.bio if author.bio != None else "Sem dados"}')
+      except Exception as e:
+        print(f'Error ao exibir arquivo CSV - {e}')
+   
+    def create_csv(self):
+      name_file = input('Digite o nome do arquivo CSV: ')
+      print('Criando arquivo CSV... \n')
+      try:
+         authors = self.__author_dao.getAll()
+         create_csv_author(name_file, authors)
+      except Exception as e:
+         print(f'Error ao criar arquivo CSV - {e}')
+
+    

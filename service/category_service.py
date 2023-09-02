@@ -1,5 +1,6 @@
 from dao.category_dao import CategoryDAO
 from model.category import Category
+from utils.csv_processor import read_csv_category, create_csv_category
 
 class CategoryService:
   def  __init__ (self):
@@ -16,6 +17,8 @@ class CategoryService:
      3 - Excluir categoria
      4 - Ver categoria por Id
      5 - Pesquisar categoria por nome
+     6 - Ler de arquivo CSV
+     7 - Exportar para CSV
      0 - Voltar ao menu anterior''')
 
      selection = input('Digite a opção: ')
@@ -32,6 +35,10 @@ class CategoryService:
        self.showById()
      elif selection == '5':
        self.showByName()
+     elif selection == '6':
+       self.read_csv()
+     elif selection == '7':
+       self.create_csv()
      else:
        print('Opção inválida! Por favor, tente novamente!')
      
@@ -113,4 +120,21 @@ class CategoryService:
     
     input('Pressione uma tecla para continuar... ')
 
+  def read_csv(self):
+    name_file = input('Digite o nome do arquivo CSV (Precisa estar na raiz do projeto). \n -> ')
+    print('Listando do arquivo CSV...\n')
+    try:
+      categories = read_csv_category(name_file)
+      for cat in categories: 
+         print(f'Nome: {cat.name.title()}')
+    except Exception as e:
+      print(f'Error ao exibir arquivo CSV - {e}')
 
+  def create_csv(self):
+    name_file = input('Digite o nome do arquivo CSV: ')
+    print('Criando arquivo CSV... \n')
+    try:
+      categories = self.__category_dao.getAll()
+      create_csv_category(name_file, categories)
+    except Exception as e:
+      print(f'Error ao criar arquivo CSV - {e}')
