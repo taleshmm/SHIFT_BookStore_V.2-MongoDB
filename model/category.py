@@ -18,3 +18,6 @@ class Category:
     @name.setter
     def name(self, name: str):
         self.__name = name
+    
+    def in_dump(self) -> dict:
+        return {'name': self.__name}

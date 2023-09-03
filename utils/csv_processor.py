@@ -14,8 +14,8 @@ def read_csv_editor(name_file: str):
     csv_reader = csv.DictReader(file_csv, delimiter=',') 
     list_editors = list()
     for row in csv_reader:
-      editorRow = Editor(row['name'], row['address'], row['phone'])
-      list_editors.append(editorRow)
+      row_changed = Editor(row['name'], row['address'], row['phone'])
+      list_editors.append(row_changed)
     return list_editors
   
 def read_csv_author(name_file: str):
@@ -23,8 +23,8 @@ def read_csv_author(name_file: str):
     csv_reader = csv.DictReader(file_csv, delimiter=',') 
     list_authors = list()
     for row in csv_reader:
-      editorRow = Author(row['name'], row['email'], row['phone'], row['bio'])
-      list_authors.append(editorRow)
+      row_changed = Author(row['name'], row['email'], row['phone'], row['bio'])
+      list_authors.append(row_changed)
     return list_authors
   
 def read_csv_category(name_file: str):
@@ -32,8 +32,8 @@ def read_csv_category(name_file: str):
     csv_reader = csv.DictReader(file_csv, delimiter=',') 
     list_categories = list()
     for row in csv_reader:
-      editorRow = Category(row['name'])
-      list_categories.append(editorRow)
+      row_changed = Category(row['name'])
+      list_categories.append(row_changed)
     return list_categories
   
 def read_csv_book(name_file: str):
@@ -41,8 +41,8 @@ def read_csv_book(name_file: str):
     csv_reader = csv.DictReader(file_csv, delimiter=',') 
     list_books = list()
     for row in csv_reader:
-      editorRow = Book(row['title'], row['isbn'], row['year'], row['pages'],row['summary'], row['category'], row['editor'], row['author'])
-      list_books.append(editorRow)
+      row_changed = Book(row['title'], row['isbn'], row['year'], row['pages'],row['summary'], row['category'], row['editor'], row['author'])
+      list_books.append(row_changed)
     return list_books
   
 def create_csv_editor(name_file: str, list_editors):
