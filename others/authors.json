@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Sarah Williams",
+    "email": "sarah.williams@email.com",
+    "phone": "+1 555-111-2222",
+    "bio": "Sarah Williams é uma autora fictícia conhecida por suas histórias cativantes sobre mistérios e enigmas."
+  },
+  {
+    "name": "Michael Turner",
+    "email": "michael.turner@email.com",
+    "phone": "+1 555-222-3333",
+    "bio": "Michael Turner é um autor fictício especializado em literatura de ficção científica e aventura espacial."
+  },
+  {
+    "name": "Emily Parker",
+    "email": "emily.parker@email.com",
+    "phone": "+1 555-333-4444",
+    "bio": "Emily Parker é uma autora talentosa conhecida por seus romances emocionantes e histórias de amor."
+  },
+  {
+    "name": "Daniel Clark",
+    "email": "daniel.clark@email.com",
+    "phone": "+1 555-444-5555",
+    "bio": "Daniel Clark é um autor versátil que escreve desde poesia até histórias de terror assustadoras."
+  },
+  {
+    "name": "Olivia Brown",
+    "email": "olivia.brown@email.com",
+    "phone": "+1 555-555-6666",
+    "bio": "Olivia Brown é uma autora premiada conhecida por suas biografias fascinantes de figuras históricas."
+  }
+]

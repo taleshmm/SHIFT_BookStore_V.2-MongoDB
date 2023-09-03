@@ -7,6 +7,7 @@ from dao.author_dao import AuthorDAO
 from model.editor import Editor
 from dao.editor_dao import EditorDAO
 from utils.csv_processor import read_csv_book, create_csv_book
+from utils.json_processor import read_json_book, create_json_book
 
 class BookService:
     def __init__(self, category_dao: CategoryDAO, editor_dao: EditorDAO, author_dao: AuthorDAO):
@@ -29,7 +30,9 @@ class BookService:
      5 - Pesquisar por título
      6 - Ler de arquivo CSV
      7 - Exportar para CSV
-     8 - Inserir CSV no banco
+     8 - Ler de arquivo JSON
+     9 - Exportar para JSON
+     10 - Inserir arquivo no banco
      0 - Voltar ao menu anterior''')
         
         selection = input('Digite a opção: ')
@@ -46,11 +49,15 @@ class BookService:
         elif selection == '5':
            self.showByTitle()
         elif selection == '6':
-           self.read_csv()
+           self.read_file('CSV')
         elif selection == '7':
-           self.create_csv()
+           self.export_to_file('CSV')
         elif selection == '8':
-           self.insert_many()
+           self.read_file('JSON')
+        elif selection == '9':
+           self.export_to_file('JSON')
+        elif selection == '10':
+           self.insert_many() 
         else:
            print('Opção inválida! Por favor, tente novamente!')
      
@@ -189,12 +196,18 @@ Autor(a): {self.__author_dao.getById(book.author).name.title()}''')
         return   
     
       input('Pressione uma tecla para continuar...' )
-
-    def read_csv(self):
-      name_file = input('Digite o nome do arquivo CSV (Precisa estar na raiz do projeto). \n -> ')
-      print('Listando do arquivo CSV...\n')
+         
+    def read_file(self, type_file: str):
+      name_file = input(f'Digite o nome do arquivo {type_file} (Precisa estar na raiz do projeto). \n -> ')
+      print(f'Listando do arquivo {type_file}...\n')
       try:
-         books = read_csv_book(name_file)
+         books = None
+         if type_file == 'CSV':
+            books = read_csv_book(name_file)
+         elif type_file == 'JSON':
+            books = read_json_book(name_file)
+         else:
+            print('O tipo de arquivo diferentes do suportado.')  
          for book in books: 
             print(f'''ID: {book.id} | Título: {book.title.capitalize()} | Ano: {book.year} | Páginas: {book.pages}
  Resumo: {book.summary}
@@ -203,26 +216,40 @@ Autor(a): {self.__author_dao.getById(book.author).name.title()}''')
  Editora: {book.editor}
  Autor(a): {book.author}''')
       except Exception as e:
-         print(f'Error ao exibir arquivo CSV - {e}')
-
-    def create_csv(self):
-      name_file = input('Digite o nome do arquivo CSV: ')
-      print('Criando arquivo CSV... \n')
+         print(f'Error ao exibir arquivo {type_file} - {e}')
+         
+    def export_to_file(self, type_file:str):
+      name_file = input(f'Digite o nome do arquivo {type_file}: ')
+      print(f'Criando arquivo {type_file}... \n')
       try:
          books = self.__book_dao.getAll()
-         create_csv_book(name_file, books)
+         if type_file == 'CSV':
+            create_csv_book(name_file, books)
+         elif type_file == 'JSON':
+            create_json_book(name_file, books)
+         else:
+            print('O tipo de arquivo diferentes do suportado.')
       except Exception as e:
-         print(f'Error ao criar arquivo CSV - {e}')
+         print(f'Error ao criar arquivo {type_file} - {e}')   
          
     def insert_many(self):
-       try:
-         name_file = input('Digite o nome do arquivo CSV: ')
-         books_csv = read_csv_book(name_file)
-         list_books = list()
-         print('Inserindo em banco...\n')
-         for bk in books_csv:
-            list_books.append((bk.title, bk.isbn, bk.pages, bk.year, bk.summary, bk.category, bk.editor, bk.author))
-         self.__book_dao.create_many(list_books)
-         print('Dados inseridos com sucesso.')
-       except Exception as e:
-         print(f'Error ao inserir dados no banco - {e}')    
+     try:
+      type_file = input(' \nEscolha o tipo de arquivo:\n 1 - CSV\n 2 - JSON\n-> ')
+      name_file = input('Digite o nome do arquivo: ')
+      books_file = None
+      if type_file == '1':
+        books_file = read_csv_book(name_file)
+      elif type_file == '2':
+        books_file = read_json_book(name_file)
+      else: 
+        print('Opção inválida, tente novamente!')
+        return
+      list_books = list()
+      print('Inserindo em banco...\n')
+      for bk in books_file:
+         list_books.append((bk.title, bk.isbn, bk.pages, bk.year, bk.summary, bk.category, bk.editor, bk.author))
+      self.__book_dao.create_many(list_books)
+      print('Dados inseridos com sucesso.')
+     except Exception as e:
+       print(f'Error ao inserir dados no banco - {e}')
+  

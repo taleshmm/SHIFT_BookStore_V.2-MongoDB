@@ -2,6 +2,7 @@ from dao.editor_dao import EditorDAO
 from model.editor import Editor
 from utils.util import showPhone, clearPhone
 from utils.csv_processor import read_csv_editor, create_csv_editor
+from utils.json_processor import read_json_editor, create_json_editor
 
 class EditorService:
     def __init__(self):
@@ -20,7 +21,9 @@ class EditorService:
      5 - Pesquisar editora por nome
      6 - Ler de arquivo CSV
      7 - Exportar para CSV
-     8 - Inserir CSV no banco
+     8 - Ler de arquivo JSON
+     9 - Exportar para JSON
+     10 - Inserir arquivo no banco
      0 - Voltar ao menu anterior''')
         
         selection = input('Digite a opção: ')
@@ -38,10 +41,14 @@ class EditorService:
         elif selection == '5':
            self.showByName()
         elif selection == '6':
-           self.read_csv()
+           self.read_file('CSV')
         elif selection == '7':
-           self.create_csv()
+           self.export_to_file('CSV')
         elif selection == '8':
+           self.read_file('JSON')
+        elif selection == '9':
+           self.export_to_file('JSON')
+        elif selection == '10':
            self.insert_many()
         else:
            print('Opção inválida! Por favor, tente novamente!')
@@ -123,35 +130,54 @@ class EditorService:
         return   
       
       input('Pressione uma tecla para continuar... ')
-
-    def read_csv(self):
-      name_file = input('Digite o nome do arquivo CSV (Precisa estar na raiz do projeto). \n -> ')
-      print('Listando do arquivo CSV...\n')
+   
+    def read_file(self, type_file: str):
+      name_file = input(f'Digite o nome do arquivo {type_file} (Precisa estar na raiz do projeto). \n -> ')
+      print(f'Listando do arquivo {type_file}...\n')
       try:
-        editors = read_csv_editor(name_file)
-        for editor in editors: 
+         editors = None
+         if type_file == 'CSV':
+            editors = read_csv_editor(name_file)
+         elif type_file == 'JSON':
+            editors = read_json_editor(name_file)
+         else:
+            print('O tipo de arquivo diferentes do suportado.')  
+         for editor in editors: 
            print(f'Nome: {editor.name.title()} | Endereço: {editor.address} | {showPhone(editor.phone)}')
       except Exception as e:
-        print(f'Error ao exibir arquivo CSV - {e}')
-   
-    def create_csv(self):
-      name_file = input('Digite o nome do arquivo CSV: ')
-      print('Criando arquivo CSV...\n')
+         print(f'Error ao exibir arquivo {type_file} - {e}')
+              
+    def export_to_file(self, type_file:str):
+      name_file = input(f'Digite o nome do arquivo {type_file}: ')
+      print(f'Criando arquivo {type_file}... \n')
       try:
-        editors = self.__editor_dao.getAll()
-        create_csv_editor(name_file, editors)
+         editors = self.__editor_dao.getAll()
+         if type_file == 'CSV':
+            create_csv_editor(name_file, editors)
+         elif type_file == 'JSON':
+            create_json_editor(name_file, editors)
+         else:
+            print('O tipo de arquivo diferentes do suportado.')
       except Exception as e:
-        print(f'Error ao criar arquivo CSV - {e}')
-     
+         print(f'Error ao criar arquivo {type_file} - {e}')
+       
     def insert_many(self):
      try:
-      name_file = input('Digite o nome do arquivo CSV: ')
-      editors_csv = read_csv_editor(name_file)
+      type_file = input(' \nEscolha o tipo de arquivo:\n 1 - CSV\n 2 - JSON\n-> ')
+      name_file = input('Digite o nome do arquivo: ')
+      editors_file = None
+      if type_file == '1':
+        editors_file = read_csv_editor(name_file)
+      elif type_file == '2':
+        editors_file = read_json_editor(name_file)
+      else: 
+        print('Opção inválida, tente novamente!')
+        return
       list_editors = list()
       print('Inserindo em banco...\n')
-      for ed in editors_csv:
+      for ed in editors_file:
         list_editors.append((ed.name, ed.address, ed.phone))
       self.__editor_dao.create_many(list_editors)
       print('Dados inseridos com sucesso.')
      except Exception as e:
-       print(f'Error ao inserir dados no banco - {e}') 
+       print(f'Error ao inserir dados no banco - {e}')

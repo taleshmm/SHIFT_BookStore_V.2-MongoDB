@@ -45,3 +45,6 @@ class Author:
     @bio.setter
     def bio(self, bio: str):
        self.__bio = bio
+    
+    def in_dump(self) -> dict:
+      return {'name': self.__name, 'email': self.__email, 'phone': self.__phone, 'bio': self.__bio}

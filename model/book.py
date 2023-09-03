@@ -85,3 +85,6 @@ class Book:
     @author.setter
     def author(self, author: Author):
         self.__author = author
+    
+    def in_dump(self) -> dict:
+      return {'title': self.__title, 'isbn': self.__isbn, 'pages': self.__pages, 'year': self.__year, 'summary': self.__summary, 'category': self.__category, 'editor': self.__editor, 'author': self.__author}

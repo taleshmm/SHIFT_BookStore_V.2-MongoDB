@@ -2,6 +2,7 @@ from dao.author_dao import AuthorDAO
 from model.author import Author
 from utils.util import showPhone, clearPhone
 from utils.csv_processor import read_csv_author, create_csv_author
+from utils.json_processor import read_json_author, create_json_author
 
 class AuthorService:
     def __init__(self):
@@ -21,7 +22,9 @@ class AuthorService:
      6 - Pesquisar autor(a) por e-mail
      7 - Ler de arquivo CSV
      8 - Exportar para CSV
-     9 - Inserir CSV no banco
+     9 - Ler de arquivo JSON
+     10 - Exportar para JSON
+     11 - Inserir arquivo no banco
      0 - Voltar ao menu anterior''')
         
         selection = input('Digite a opção: ')
@@ -40,10 +43,14 @@ class AuthorService:
         elif selection == '6':
            self.showByEmail()
         elif selection == '7':
-           self.read_csv()
+           self.read_file('CSV')
         elif selection == '8':
-           self.create_csv()
+           self.export_to_file('CSV')
         elif selection == '9':
+           self.read_file('JSON')
+        elif selection == '10':
+           self.export_to_file('JSON')
+        elif selection == '11':
            self.insert_many()
         else:
            print('Opção inválida! Por favor, tente novamente!')
@@ -140,38 +147,58 @@ class AuthorService:
         return   
     
       input('Pressione uma tecla para continuar...' )
-          
-    def read_csv(self):
-      name_file = input('Digite o nome do arquivo CSV (Precisa estar na raiz do projeto). \n -> ')
-      print('Listando do arquivo CSV...\n')
+             
+    def read_file(self, type_file: str):
+      name_file = input(f'Digite o nome do arquivo {type_file} (Precisa estar na raiz do projeto). \n -> ')
+      print(f'Listando do arquivo {type_file}...\n')
       try:
-        authors = read_csv_author(name_file)
-        for author in authors: 
+         authors = None
+         if type_file == 'CSV':
+            authors = read_csv_author(name_file)
+         elif type_file == 'JSON':
+            authors = read_json_author(name_file)
+         else:
+            print('O tipo de arquivo diferentes do suportado.')  
+         for author in authors: 
            print(f'ID: {author.id} | Nome: {author.name.title()} \nE-mail: {author.email} | Telefone: {showPhone(author.phone)}\nBio: {author.bio if author.bio != None else "Sem dados"}')
       except Exception as e:
-        print(f'Error ao exibir arquivo CSV - {e}')
-   
-    def create_csv(self):
-      name_file = input('Digite o nome do arquivo CSV: ')
-      print('Criando arquivo CSV... \n')
+         print(f'Error ao exibir arquivo {type_file} - {e}')
+            
+    def export_to_file(self, type_file:str):
+      name_file = input(f'Digite o nome do arquivo {type_file}: ')
+      print(f'Criando arquivo {type_file}... \n')
       try:
          authors = self.__author_dao.getAll()
-         create_csv_author(name_file, authors)
+         if type_file == 'CSV':
+            create_csv_author(name_file, authors)
+         elif type_file == 'JSON':
+            create_json_author(name_file, authors)
+         else:
+            print('O tipo de arquivo diferentes do suportado.')
       except Exception as e:
-         print(f'Error ao criar arquivo CSV - {e}')
+         print(f'Error ao criar arquivo {type_file} - {e}')
          
     def insert_many(self):
-       try:
-         name_file = input('Digite o nome do arquivo CSV: ')
-         authors_csv = read_csv_author(name_file)
-         list_authors = list()
-         print('Inserindo em banco...\n')
-         for at in authors_csv:
-            list_authors.append((at.name, at.email, at.phone, at.bio))
-         self.__author_dao.create_many(list_authors)
-         print('Dados inseridos com sucesso.')
-       except Exception as e:
-         print(f'Error ao inserir dados no banco - {e}') 
+     try:
+      type_file = input(' \nEscolha o tipo de arquivo:\n 1 - CSV\n 2 - JSON\n-> ')
+      name_file = input('Digite o nome do arquivo: ')
+      authors_file = None
+      if type_file == '1':
+        authors_file = read_csv_author(name_file)
+      elif type_file == '2':
+        authors_file = read_json_author(name_file)
+      else: 
+        print('Opção inválida, tente novamente!')
+        return
+      list_authors = list()
+      print('Inserindo em banco...\n')
+      for at in authors_file:
+         list_authors.append((at.name, at.email, at.phone, at.bio))
+      self.__author_dao.create_many(list_authors)
+      print('Dados inseridos com sucesso.')
+     except Exception as e:
+       print(f'Error ao inserir dados no banco - {e}')
+ 
      
 
     

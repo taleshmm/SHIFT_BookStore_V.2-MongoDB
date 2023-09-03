@@ -20,9 +20,11 @@ Welcome to the Python Bookstore Project! This is an initial project of a booksto
 
 3. Open the terminal and navigate to the root folder of the project.
 
-4. Execute the `main.py` file using the following command:
+4. **Important Note**: To use the file reading functions, move the files from the "others" folder located in the test files directory to the project's root directory.
 
-5. Follow the instructions in the terminal to interact with the application. Use the numeric options to select the desired action.
+5. Execute the `main.py` file using the following command:
+
+6. Follow the instructions in the terminal to interact with the application. Use the numeric options to select the desired action.
 
 ## Project Structure
 

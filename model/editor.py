@@ -36,3 +36,6 @@ class Editor:
     @phone.setter
     def phone(self, phone: str):
       self.__phone = phone
+    
+    def in_dump(self) -> dict:
+      return {'name': self.__name, 'address': self.__address, 'phone': self.__phone}
