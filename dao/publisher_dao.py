@@ -1,36 +1,36 @@
-from model.editor import Editor
+from model.publisher import Publisher
 from database.connection_factory import ConnectionFactory
 
-class EditorDAO:
+class PublisherDAO:
     def __init__(self):
         self.__connection_factory = ConnectionFactory()
     
-    def getAll(self) -> list[Editor]:
+    def getAll(self) -> list[Publisher]:
         connect = self.__connection_factory.get_connection()
         cursor = connect.cursor()
         cursor.execute("SELECT * FROM publishers")
         rows = cursor.fetchall()
-        editors = list()
+        publishers = list()
         for row in rows:
-            editorRow = Editor(row[1], row[2], row[3], row[0])
-            editors.append(editorRow)
+            publisherRow = Publisher(row[1], row[2], row[3], row[0])
+            publishers.append(publisherRow)
         cursor.close()
         connect.close()
-        return editors
+        return publishers
     
-    def create(self, editor: Editor) -> None:
+    def create(self, publisher: Publisher) -> None:
         connect = self.__connection_factory.get_connection()
         cursor = connect.cursor()
-        cursor.execute("INSERT INTO publishers (name, address, phone) VALUES (%s, %s, %s)", (editor.name, editor.address, editor.phone))
+        cursor.execute("INSERT INTO publishers (name, address, phone) VALUES (%s, %s, %s)", (publisher.name, publisher.address, publisher.phone))
         connect.commit()
         cursor.close()
         connect.close()
         
 
-    def delete(self, editor_id: int) -> bool:
+    def delete(self, publisher_id: int) -> bool:
         connect = self.__connection_factory.get_connection()
         cursor = connect.cursor()
-        cursor.execute("DELETE FROM publishers WHERE id = %s", (editor_id,))
+        cursor.execute("DELETE FROM publishers WHERE id = %s", (publisher_id,))
         rows_deleted = cursor.rowcount
         connect.commit()
         cursor.close()
@@ -39,35 +39,34 @@ class EditorDAO:
             return True
         return False
 
-    
-    def getById(self, editor_id: id) -> Editor:
+    def getById(self, publisher_id: id) -> Publisher:
        connect = self.__connection_factory.get_connection()
        cursor = connect.cursor()
-       cursor.execute("SELECT * FROM publishers WHERE id = %s", (editor_id,))
+       cursor.execute("SELECT * FROM publishers WHERE id = %s", (publisher_id,))
        row = cursor.fetchone()
        cursor.close()
        connect.close()
-       find_editor = None
+       find_publisher = None
        if row:
-           find_editor = Editor(row[1], row[2], row[3], row[0])
-       return find_editor     
+           find_publisher = Publisher(row[1], row[2], row[3], row[0])
+       return find_publisher     
     
-    def getByName(self, editor_name: str) -> Editor:
+    def getByName(self, publisher_name: str) -> Publisher:
         connect = self.__connection_factory.get_connection()
         cursor = connect.cursor()
-        cursor.execute("SELECT * FROM publishers WHERE name = %s", (editor_name,))
+        cursor.execute("SELECT * FROM publishers WHERE name = %s", (publisher_name,))
         row = cursor.fetchone()
         cursor.close()
         connect.close()
-        find_editor = None
+        find_publisher = None
         if row:
-           find_editor = Editor(row[1], row[2], row[3], row[0])
-        return find_editor   
+           find_publisher = Publisher(row[1], row[2], row[3], row[0])
+        return find_publisher   
     
-    def create_many(self, editors):
+    def create_many(self, publishers):
         connect = self.__connection_factory.get_connection()
         cursor = connect.cursor()
-        cursor.executemany("INSERT INTO publishers (name, address, phone) VALUES (%s, %s, %s)", editors)
+        cursor.executemany("INSERT INTO publishers (name, address, phone) VALUES (%s, %s, %s)", publishers)
         connect.commit()
         cursor.close()
         connect.close()

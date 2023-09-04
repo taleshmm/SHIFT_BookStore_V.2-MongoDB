@@ -1,26 +1,26 @@
 import psycopg2 as pg
 
 class ConnectionFactory:
-  def get_connection(self):
-   '''Função de Conexão ao Banco de Dados.
+    def get_connection(self):
+        '''Database Connection Function.
 
-Esta função serve como um ponto de entrada para estabelecer uma conexão com o banco de dados. Certifique-se de substituir os placeholders pelos dados específicos do seu ambiente.
+        This function serves as an entry point to establish a connection to the database. Make sure to replace the placeholders with specific data from your environment.
 
-Parâmetros:
-    - host (str): O endereço do servidor do banco de dados.
-    - username (str): O nome de usuário para autenticação.
-    - password (str): A senha do usuário para autenticação.
-    - database (str): O nome do banco de dados que deseja acessar.
-Retorno:
-    - conn: A conexão estabelecida com o banco de dados.
-    - cursor: O cursor para executar consultas SQL.
+        Parameters:
+            - host (str): The database server's address.
+            - username (str): The username for authentication.
+            - password (str): The user's password for authentication.
+            - database (str): The name of the database you want to access.
 
-Exemplo de uso:
-    conn, cursor = connect_to_database('seu_host', 'seu_usuario', 'sua_senha', 'seu_banco_de_dados')
-    cursor.execute('SELECT * FROM tabela_exemplo')
-    resultados = cursor.fetchall()
-    conn.close()
-'''
-   return  pg.connect(host='Host', database='database', user='user', password='password')
-  
-  
+        Returns:
+            - conn: The established database connection.
+            - cursor: The cursor for executing SQL queries.
+
+        Example Usage:
+            conn, cursor = connect_to_database('your_host', 'your_username', 'your_password', 'your_database')
+            cursor.execute('SELECT * FROM example_table')
+            results = cursor.fetchall()
+            conn.close()
+        '''
+        
+        return  pg.connect(host='Host', database='database', user='user', password='password')

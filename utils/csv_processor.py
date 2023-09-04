@@ -1,6 +1,6 @@
 import csv
 from pathlib import Path
-from model.editor import Editor
+from model.publisher import Publisher
 from model.category import Category
 from model.author import Author
 from model.book import Book
@@ -9,14 +9,14 @@ from model.book import Book
 def get_path_complet(name_file: str) -> str:
   return f'{str(Path().absolute())}/{name_file}.csv'
 
-def read_csv_editor(name_file: str):
+def read_csv_publisher(name_file: str):
   with open(get_path_complet(name_file)) as file_csv:
     csv_reader = csv.DictReader(file_csv, delimiter=',') 
-    list_editors = list()
+    list_publishers = list()
     for row in csv_reader:
-      row_changed = Editor(row['name'], row['address'], row['phone'])
-      list_editors.append(row_changed)
-    return list_editors
+      row_changed = Publisher(row['name'], row['address'], row['phone'])
+      list_publishers.append(row_changed)
+    return list_publishers
   
 def read_csv_author(name_file: str):
   with open(get_path_complet(name_file)) as file_csv:
@@ -41,17 +41,17 @@ def read_csv_book(name_file: str):
     csv_reader = csv.DictReader(file_csv, delimiter=',') 
     list_books = list()
     for row in csv_reader:
-      row_changed = Book(row['title'], row['isbn'], row['year'], row['pages'],row['summary'], row['category'], row['editor'], row['author'])
+      row_changed = Book(row['title'], row['isbn'], row['year'], row['pages'],row['summary'], row['category'], row['publisher'], row['author'])
       list_books.append(row_changed)
     return list_books
   
-def create_csv_editor(name_file: str, list_editors):
+def create_csv_publisher(name_file: str, list_publishers):
   with open(get_path_complet(name_file), 'w', newline='') as new_file:
-    new_editor = csv.writer(new_file)
-    new_editor.writerow(['name', 'address', 'phone'])
-    for editor in list_editors:
-      new_editor.writerow([editor.name, editor.address, editor.phone])
-  print('---Os dados foram carregados com sucesso!---')
+    new_publisher = csv.writer(new_file)
+    new_publisher.writerow(['name', 'address', 'phone'])
+    for publisher in list_publishers:
+      new_publisher.writerow([publisher.name, publisher.address, publisher.phone])
+  print('---Data has been loaded successfully!---')
 
 def create_csv_author(name_file: str, list_authors):
   with open(get_path_complet(name_file), 'w', newline='') as new_file:
@@ -59,7 +59,7 @@ def create_csv_author(name_file: str, list_authors):
     new_author.writerow(['name', 'email', 'phone', 'bio'])
     for author in list_authors:
       new_author.writerow([author.name, author.email, author.phone, author.bio])
-  print('Os dados foram carregados com sucesso!')
+  print('---Data has been loaded successfully!---')
 
 def create_csv_category(name_file: str, list_categorys):
   with open(get_path_complet(name_file), 'w', newline='') as new_file:
@@ -67,12 +67,12 @@ def create_csv_category(name_file: str, list_categorys):
     new_category.writerow(['name'])
     for category in list_categorys:
       new_category.writerow([category.name])
-  print('Os dados foram carregados com sucesso!')
+  print('---Data has been loaded successfully!---')
 
 def create_csv_book(name_file: str, list_books):
   with open(get_path_complet(name_file), 'w', newline='') as new_file:
     new_book = csv.writer(new_file)
-    new_book.writerow(['title', 'isbn', 'year', 'pages', 'summary', 'category', 'editor', 'author'])
+    new_book.writerow(['title', 'isbn', 'year', 'pages', 'summary', 'category', 'publisher', 'author'])
     for book in list_books:
-      new_book.writerow([book.title, book.isbn, book.year, book.pages, book.summary, book.category, book.editor, book.author])
-  print('Os dados foram carregados com sucesso!')
+      new_book.writerow([book.title, book.isbn, book.year, book.pages, book.summary, book.category, book.publisher, book.author])
+  print('---Data has been loaded successfully!---')

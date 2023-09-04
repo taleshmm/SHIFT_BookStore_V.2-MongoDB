@@ -1,9 +1,9 @@
 from .author import Author
 from .category import Category
-from .editor import Editor
+from .publisher import Publisher
 
 class Book:
-    def __init__(self, title: str, isbn: str, pages: int, year: int,  summary: str, category: Category, editor: Editor, author: Author, id: int=0):
+    def __init__(self, title: str, isbn: str, pages: int, year: int,  summary: str, category: Category, publisher: Publisher, author: Author, id: int=0):
         self.__id: int = id
         self.__title: str = title
         self.__summary: str = summary
@@ -11,7 +11,7 @@ class Book:
         self.__pages: int = pages
         self.__isbn: int = isbn
         self.__category: Category = category
-        self.__editor: Editor = editor
+        self.__publisher: Publisher = publisher
         self.__author: Author = author
 
     @property
@@ -71,12 +71,12 @@ class Book:
         self.__category = category
     
     @property
-    def editor(self) -> Editor:
-        return self.__editor
+    def publisher(self) -> Publisher:
+        return self.__publisher
     
-    @editor.setter
-    def editor(self, editor: Editor):
-        self.__editor = editor
+    @publisher.setter
+    def publisher(self, publisher: Publisher):
+        self.__publisher = publisher
   
     @property
     def author(self) -> Author:
@@ -87,4 +87,4 @@ class Book:
         self.__author = author
     
     def in_dump(self) -> dict:
-      return {'title': self.__title, 'isbn': self.__isbn, 'pages': self.__pages, 'year': self.__year, 'summary': self.__summary, 'category': self.__category, 'editor': self.__editor, 'author': self.__author}
+      return {'title': self.__title, 'isbn': self.__isbn, 'pages': self.__pages, 'year': self.__year, 'summary': self.__summary, 'category': self.__category, 'publisher': self.__publisher, 'author': self.__author}

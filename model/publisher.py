@@ -1,4 +1,4 @@
-class Editor:
+class Publisher:
     def __init__(self, name: str, address: str, phone: str, id: int=0):
         self.__id: int = id
         self.__name: str = name

@@ -1,41 +1,42 @@
 from service.category_service import CategoryService
-from service.editor_service import EditorService
+from service.publisher_service import PublisherService
 from service.author_service import AuthorService
 from service.book_service import BookService
 
 category_service = CategoryService()
-editor_service = EditorService()
+publisher_service = PublisherService()
 author_service = AuthorService()
-book_service = BookService(category_service.category_dao, editor_service.editor_dao, author_service.author_dao)
+book_service = BookService(category_service.category_dao, publisher_service.publisher_dao, author_service.author_dao)
 
-def principal_menu():
-     print('''\n[Menu Principal] Escolha uma das seguintes opções:
-  1 - Categorias
-  2 - Editoras
-  3 - Autores(as)
-  4 - Livros
-  0 - Sair do programa''')
-     selection = input('Digite a opção: ')
-     
-     if selection == '0':
-        print('Obrigado, até logo!')
+def main_menu():
+    print('''\n[Main Menu] Choose one of the following options:
+  1 - Categories
+  2 - Publishers
+  3 - Authors
+  4 - Books
+  0 - Exit the program''')
+    selection = input('Enter your choice: ')
+
+    if selection == '0':
+        print('Thank you, goodbye!')
         return
-     if selection == '1':
+    if selection == '1':
         category_service.menu()
-     elif selection == '2':
-         editor_service.menu()
-     elif selection == '3':
-         author_service.menu()
-     elif selection == '4':
-         book_service.menu()
-     else:
-        print('Opção inválida! Por favor, tente novamente!')
-     
-     principal_menu() 
+    elif selection == '2':
+        publisher_service.menu()
+    elif selection == '3':
+        author_service.menu()
+    elif selection == '4':
+        book_service.menu()
+    else:
+        print('Invalid option! Please, try again.')
+
+    main_menu()
 
 if __name__ == '__main__':
-    print('Bem-vindo a Livraria SHIFT - Mastering Python!')
-    principal_menu()
+    print('Welcome to SHIFT Bookstore - Mastering Python!')
+    main_menu()
+
 
 
       
