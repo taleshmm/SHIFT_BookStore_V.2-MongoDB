@@ -87,7 +87,7 @@ class PublisherService:
     def remove(self):
       print('\nRemoving publisher...')
       try:
-         id = int(input('Enter the ID of the publisher you want to delete: '))
+         id = input('Enter the ID of the publisher you want to delete: ')
          if self.__publisher_dao.delete(id):
             print('Publisher deleted successfully!')
          else:
@@ -100,7 +100,7 @@ class PublisherService:
     def showById(self):
       print('\nPublisher by ID...')
       try:
-         id = int(input('Enter the ID of the publisher: '))
+         id = input('Enter the ID of the publisher: ')
          publisher = self.__publisher_dao.getById(id)
          if publisher is not None:
             print(f'ID: {publisher.id} | Name: {publisher.name.title()} | Address: {publisher.address} | Phone: {showPhone(publisher.phone)}')
@@ -199,8 +199,8 @@ class PublisherService:
             return
          list_publishers = list()
          print('Inserting into the database...\n')
-         for publisher in publishers_file:
-            list_publishers.append((publisher.name, publisher.address, publisher.phone))
+         for publisher in publishers_file:            
+            list_publishers.append({'name': publisher.name, 'address': publisher.address, 'phone': publisher.phone})
          self.__publisher_dao.create_many(list_publishers)
          print('Data inserted successfully.')
       except Exception as e:

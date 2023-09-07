@@ -1,16 +1,18 @@
+from bson import ObjectId
+
 class Publisher:
-    def __init__(self, name: str, address: str, phone: str, id: int=0):
-        self.__id: int = id
+    def __init__(self, name: str, address: str, phone: str):
+        self.__id: ObjectId = None
         self.__name: str = name
         self.__address: str = address
         self.__phone: str = phone
 
     @property
-    def id(self) -> int:
+    def id(self) -> ObjectId:
       return self.__id
     
     @id.setter
-    def id(self, id: int):
+    def id(self, id: ObjectId):
       self.__id = id
 
     @property
