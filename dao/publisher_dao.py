@@ -1,9 +1,9 @@
 from model.publisher import Publisher
-from database.connection_factory import ConnectionFactory
+from database.client_factory import ClientFactory
 
 class PublisherDAO:
     def __init__(self):
-        self.__connection_factory = ConnectionFactory()
+        self.__connection_factory = ClientFactory()
     
     def getAll(self) -> list[Publisher]:
         connect = self.__connection_factory.get_connection()

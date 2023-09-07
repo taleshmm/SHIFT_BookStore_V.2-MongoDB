@@ -82,7 +82,7 @@ class CategoryService:
   def remove(self):
     print('\nRemoving category...')
     try:
-      category_id = int(input('Enter the category ID to delete: '))
+      category_id = input('Enter the category ID to delete: ')
       if self.__category_dao.delete(category_id):
           print('Category deleted successfully!')
       else:
@@ -95,7 +95,7 @@ class CategoryService:
   def showById(self):
     print('\nCategory by Id...')
     try:
-      id = int(input('Enter the category ID: '))
+      id = input('Enter the category ID: ')
       category = self.__category_dao.getById(id)
       if category is not None: 
           print(f'ID: {category.id} | Name: {category.name.title()}')
@@ -165,7 +165,7 @@ class CategoryService:
       list_categories = list()
       print('\nInserting into the database...\n')
       for cat in categories_file:
-          list_categories.append((cat.name,))
+          list_categories.append({'name': cat.name})
       self.__category_dao.create_many(list_categories)
       print('Data inserted successfully.')
     except Exception as e:

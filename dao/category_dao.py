@@ -1,72 +1,61 @@
 from model.category import Category
-from database.connection_factory import ConnectionFactory
+from database.client_factory import ClientFactory
+from bson import ObjectId
 
 class CategoryDAO:
     def __init__(self): 
-        self.__connection_factory = ConnectionFactory() 
+        self.__client_factory = ClientFactory() 
 
     def getAll(self) -> list[Category]:
-        connect = self.__connection_factory.get_connection()
-        cursor = connect.cursor()
-        cursor.execute(f"SELECT * FROM categories")
-        rows = cursor.fetchall()
         categories = list()
-        for row in rows:
-            categoryRow = Category(row[1], row[0])
-            categories.append(categoryRow)
-        cursor.close()
-        connect.close()
+        client = self.__client_factory.get_client()
+        db =client.bookStore
+        for doc in db.category.find():
+            cat = Category(doc['name'])
+            cat.id = doc['_id']
+            categories.append(cat)
+        client.close()
         return categories
     
     def create(self, category: Category) -> None:
-        connect = self.__connection_factory.get_connection()
-        cursor = connect.cursor()
-        cursor.execute(f"INSERT INTO categories (name) VALUES ('{category.name}')")
-        connect.commit()
-        cursor.close()
-        connect.close()
+        client = self.__client_factory.get_client()
+        db = client.bookStore
+        db.category.insert_one({'name': category.name})
+        client.close()
 
     def delete(self, category_id: int) -> bool:
-        connect = self.__connection_factory.get_connection()
-        cursor = connect.cursor()
-        cursor.execute(f"DELETE FROM categories WHERE id = '{category_id}'")
-        rows_deleted = cursor.rowcount
-        connect.commit()
-        cursor.close()
-        connect.close()
-        if rows_deleted > 0:
-            return True
-        
+        client = self.__client_factory.get_client()
+        db = client.bookStore
+        result = db.category.delete_one({'_id': ObjectId(category_id)})
+        client.close()
+        if result.deleted_count == 1:
+            return True       
         return False
     
     def getById(self, category_id: int) -> Category:
-        connect = self.__connection_factory.get_connection()
-        cursor = connect.cursor()
-        cursor.execute("SELECT * FROM categories WHERE id = %s", (category_id,))
-        row = cursor.fetchone()
         find_category = None
-        if row:
-            find_category = Category(row[1], row[0])
-        cursor.close()
-        connect.close()
+        client = self.__client_factory.get_client()
+        db = client.bookStore
+        result = db.category.find_one({'_id': ObjectId(category_id)})
+        client.close()
+        if result:
+            find_category = Category(result['name'])
+            find_category.id = result['_id']
         return find_category
 
     def getByName(self, category_name: str) -> Category:
-        connect = self.__connection_factory.get_connection()
-        cursor = connect.cursor()
-        cursor.execute("SELECT * FROM categories WHERE name = %s", (category_name))
-        row = cursor.fetchaone()
-        find_category = None
-        if row:
-            find_category = Category(row[0][1], row[0][0])
-        cursor.close()
-        connect.close()
-        return find_category
+       find_category = None
+       client = self.__client_factory.get_client()
+       db = client.bookStore
+       result = db.category.find_one({'name': category_name})
+       client.close()
+       if result:
+        find_category = Category(result['name'])
+        find_category.id = result['_id']
+       return find_category
     
     def create_many(self, categories):
-        connect = self.__connection_factory.get_connection()
-        cursor = connect.cursor()
-        cursor.executemany("INSERT INTO categories (name) VALUES (%s)", categories)
-        connect.commit()
-        cursor.close()
-        connect.close()
+        client = self.__client_factory.get_client()
+        db = client.bookStore
+        db.category.insert_many(categories)
+        client.close()

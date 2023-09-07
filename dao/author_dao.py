@@ -1,9 +1,9 @@
 from model.author import Author
-from database.connection_factory import ConnectionFactory
+from database.client_factory import ClientFactory
 
 class AuthorDAO:
   def __init__ (self):
-      self.__connection_factory = ConnectionFactory()
+      self.__connection_factory = ClientFactory()
   
   def getAll(self) ->  list[Author]:
      connect = self.__connection_factory.get_connection()
