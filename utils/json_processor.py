@@ -4,6 +4,10 @@ from model.publisher import Publisher
 from model.category import Category
 from model.author import Author
 from model.book import Book
+from dao.category_dao import CategoryDAO
+from dao.author_dao import AuthorDAO
+from dao.publisher_dao import PublisherDAO
+from .util import searchToId
 
 
 def get_path_complet(name_file: str) -> str:
@@ -71,9 +75,16 @@ def create_json_category(name_file: str, list_categorys) -> None:
   print('---Data has been loaded successfully!---')
 
 def create_json_book(name_file: str, list_books) -> None:
+  publisher_dao = PublisherDAO()
+  author_dao = AuthorDAO()
+  category_dao = CategoryDAO()
   with open(get_path_complet(name_file), 'w', newline='') as new_file:
     new_list_book = list()
     for row in list_books:
-      new_list_book.append(row.in_dump())
+      book = row.in_dump()
+      book['category'] = searchToId(category_dao, book['category'])
+      book['author'] = searchToId(author_dao, book['author'])
+      book['publisher'] = searchToId(publisher_dao, book['publisher'])
+      new_list_book.append(book)
     json.dump(new_list_book, new_file, ensure_ascii=False, indent=4)
   print('---Data has been loaded successfully!---')

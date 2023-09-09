@@ -91,7 +91,7 @@ class AuthorService:
     def remove(self):
       print('\nRemoving author...')
       try:
-         id = int(input("Enter the ID to delete the author: "))
+         id = input("Enter the ID to delete the author: ")
          if self.__author_dao.delete(id):
                print('Author deleted successfully.')
          else:
@@ -105,7 +105,7 @@ class AuthorService:
     def showById(self):
       print('\nAuthor by ID...')
       try:
-         id = int(input('Enter the author ID: '))
+         id = input('Enter the author ID: ')
          author = self.__author_dao.getById(id)
          if author is not None:
                print(f'ID: {author.id} | Name: {author.name.title()} \nEmail: {author.email} | Phone: {showPhone(author.phone)}\nBio: {author.bio if author.bio is not None else "No data"}')
@@ -192,7 +192,7 @@ class AuthorService:
          list_authors = list()
          print('Inserting into the database...\n')
          for at in authors_file:
-            list_authors.append((at.name, at.email, at.phone, at.bio))
+            list_authors.append({'name': at.name, 'email': at.email, 'phone': at.phone, 'bio': at.bio})
          self.__author_dao.create_many(list_authors)
          print('Data inserted successfully.')
       except Exception as e:

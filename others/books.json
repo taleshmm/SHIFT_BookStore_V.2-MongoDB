@@ -5,9 +5,9 @@
     "year": 2018,
     "pages": 320,
     "summary": "Uma emocionante expedição submarina em busca de tesouros perdidos.",
-    "category": 18,
-    "editor": 15,
-    "author": 16
+    "category": "Aventura",
+    "publisher": "Bookworld",
+    "author": "Sarah Williams"
   },
   {
     "title": "O Enigma do Tempo",
@@ -15,9 +15,9 @@
     "year": 2017,
     "pages": 280,
     "summary": "Uma viagem temporal que desafia a compreensão da realidade.",
-    "category": 13,
-    "editor": 16,
-    "author": 19
+    "category": "Mistério",
+    "publisher": "Novelcraft",
+    "author": "Michael Turner"
   },
   {
     "title": "Noite de Pesadelos",
@@ -25,9 +25,9 @@
     "year": 2020,
     "pages": 400,
     "summary": "Um thriller psicológico que mantém os leitores à beira do assento.",
-    "category": 8,
-    "editor": 18,
-    "author": 4
+    "category": "Terror",
+    "publisher": "Dreamwords",
+    "author": "Emily Parker"
   },
   {
     "title": "O Mistério das Estrelas Cadentes",
@@ -35,9 +35,9 @@
     "year": 2019,
     "pages": 350,
     "summary": "Um grupo de amigos embarca em uma jornada cósmica em busca de respostas.",
-    "category": 15,
-    "editor": 19,
-    "author": 12
+    "category": "Ficção Científica",
+    "publisher": "Inkmasters",
+    "author": "Daniel Clark"
   },
   {
     "title": "O Jardim Secreto",
@@ -45,8 +45,8 @@
     "year": 2016,
     "pages": 240,
     "summary": "Uma história mágica sobre a descoberta de um jardim encantado.",
-    "category": 18,
-    "editor": 17,
-    "author": 11
+    "category": "Fantasia",
+    "publisher": "Pageturners",
+    "author": "Olivia Brown"
   }
 ]

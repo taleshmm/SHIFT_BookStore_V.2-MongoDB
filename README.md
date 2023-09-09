@@ -1,8 +1,8 @@
-# Python Bookstore Project (Version 2.0) - PostgreSQL
+# Python Bookstore Project (Version 2.0) - MongoDB
 
-Welcome to the Python Bookstore Project! This project has been updated to incorporate a PostgreSQL database for data storage and retrieval. It's a bookstore application developed using object-oriented principles, conditional structures, loops, functions, and lists.
+Welcome to the Python Bookstore Project! This project has been updated to incorporate MongoDB for data storage and retrieval. It's a bookstore application developed using object-oriented principles, conditional structures, loops, functions, and lists.
 
-In this version, data is stored in an existing PostgreSQL database, and the application includes additional features for reading data from CSV or JSON files, exporting data to these formats, and inserting multiple records at once.
+In this version, data is stored in MongoDB, and the application includes additional features for reading data from CSV or JSON files, exporting data to these formats with category, author, and editor names, and inserting multiple records at once.
 
 ## Main Features
 
@@ -14,7 +14,7 @@ In this version, data is stored in an existing PostgreSQL database, and the appl
 
 4. **Search by Specific Attribute:** Allows searching for books based on a specific attribute, such as all books by a particular author.
 
-5. **Read, Export, and Insert Data:** The application now supports reading data from CSV or JSON files, exporting data to these formats, and inserting multiple records from these files into the existing PostgreSQL database.
+5. **Read, Export, and Insert Data:** The application now supports reading data from CSV or JSON files, exporting data to these formats with category, author, and editor names, and inserting multiple records from these files into MongoDB.
 
 ## How to Use
 
@@ -22,7 +22,7 @@ In this version, data is stored in an existing PostgreSQL database, and the appl
 
 2. Clone this repository to your computer.
 
-3. **Database Setup:** Before using the application, make sure you have access to an existing PostgreSQL database. You'll need to configure the connection details in the application code. Look for the database configuration section in the code and provide the necessary information.
+3. **MongoDB Setup:** Before using the application, ensure you have MongoDB installed and running locally or on a server. Configure the MongoDB connection details in the application code. Look for the database configuration section in the code and provide the necessary information.
 
 4. **Important Note**: To use the file reading functions, move the files from the "others" folder located in the test files directory to the project's root directory.
 
@@ -34,14 +34,18 @@ In this version, data is stored in an existing PostgreSQL database, and the appl
 
 The project is organized as follows:
 
-- `dao/`: Contains files related to data access objects for PostgreSQL.
+- `dao/`: Contains files related to data access objects for MongoDB.
 - `model/`: Contains class definitions that represent project objects.
 - `service/`: Contains the application's business logic.
 - `utils/`: Contains utility functions and shared resources.
 - `others/`: Contains sample CSV and JSON files for testing and data import.
 
-## Next steps
+## Next Steps
 
-This release represents a significant update to the Python Bookstore Project, with PostgreSQL integration and improved data management features. In the next steps I will implement a front-end for better use of the system:
+This release represents a significant update to the Python Bookstore Project, with MongoDB integration and improved data export functionality. In the next steps, you may consider the following improvements:
 
-Thanks! Please feel free to contribute, report issues or suggest improvements.
+- Implement a user-friendly front-end interface for better usability.
+- Enhance security features, such as authentication and authorization.
+- Prepare the application for deployment on a cloud platform or server.
+
+Thanks! Please feel free to contribute, report issues, or suggest improvements.

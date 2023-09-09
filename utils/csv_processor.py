@@ -4,6 +4,10 @@ from model.publisher import Publisher
 from model.category import Category
 from model.author import Author
 from model.book import Book
+from dao.category_dao import CategoryDAO
+from dao.author_dao import AuthorDAO
+from dao.publisher_dao import PublisherDAO
+from .util import searchToId
 
 
 def get_path_complet(name_file: str) -> str:
@@ -70,9 +74,12 @@ def create_csv_category(name_file: str, list_categorys):
   print('---Data has been loaded successfully!---')
 
 def create_csv_book(name_file: str, list_books):
+  publisher_dao = PublisherDAO()
+  author_dao = AuthorDAO()
+  category_dao = CategoryDAO()
   with open(get_path_complet(name_file), 'w', newline='') as new_file:
     new_book = csv.writer(new_file)
     new_book.writerow(['title', 'isbn', 'year', 'pages', 'summary', 'category', 'publisher', 'author'])
     for book in list_books:
-      new_book.writerow([book.title, book.isbn, book.year, book.pages, book.summary, book.category, book.publisher, book.author])
+      new_book.writerow([book.title, book.isbn, book.year, book.pages, book.summary, searchToId(category_dao, book.category), searchToId(publisher_dao, book.publisher), searchToId(author_dao, book.author)])
   print('---Data has been loaded successfully!---')

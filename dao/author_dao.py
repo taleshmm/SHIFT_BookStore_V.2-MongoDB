@@ -1,85 +1,70 @@
 from model.author import Author
 from database.client_factory import ClientFactory
+from bson import ObjectId
 
 class AuthorDAO:
   def __init__ (self):
-      self.__connection_factory = ClientFactory()
+      self.__client_factory = ClientFactory()
   
   def getAll(self) ->  list[Author]:
-     connect = self.__connection_factory.get_connection()
-     cursor = connect.cursor()
-     cursor.execute('SELECT * FROM authors')
-     rows = cursor.fetchall()
-     cursor.close()
-     connect.close()
      authors = list()
-     for row in rows:
-        authorRow = Author(row[1], row[2], row[3], row[4], row[0])
-        authors.append(authorRow)
-     
+     client = self.__client_factory.get_client()
+     db = client.bookStore
+     for doc in db.authors.find():
+        aut = Author(doc.get('name', 'No data'), doc.get('email', 'No data'), doc.get('phone', 'No data'), doc.get('bio', 'No data'))
+        aut.id = doc['_id']
+        authors.append(aut) 
+     client.close()
      return authors
         
   
   def create(self, author: Author) -> None:
-     connect = self.__connection_factory.get_connection()
-     cursor = connect.cursor()
-     cursor.execute("INSERT INTO authors (name, email, phone, bio) VALUES (%s, %s, %s, %s)", (author.name, author.email, author.phone, author.bio))
-     connect.commit()
-     cursor.close()
-     connect.close()
+     client = self.__client_factory.get_client()
+     db = client.bookStore
+     db.authors.insert_one({'name': author.name, 'email': author.email, 'phone': author.phone, 'bio': author.bio})
+     client.close()
 
   def delete(self, author_id) -> bool:
-     connect = self.__connection_factory.get_connection()
-     cursor = connect.cursor()
-     cursor.execute("DELETE FROM authors WHERE id = %s", (author_id,))
-     rows_deleted = cursor.rowcount
-     connect.commit()
-     cursor.close()
-     connect.close()
-     if rows_deleted > 0:
+     client = self.__client_factory.get_client()
+     db = client.bookStore
+     result = db.authors.delete_one({'_id': ObjectId(author_id)})
+     client.close()
+     if result.deleted_count == 1:
         return True
      return False
   
   def getById(self, author_id) -> Author:
-     connect = self.__connection_factory.get_connection()
-     cursor = connect.cursor()
-     cursor.execute("SELECT * FROM authors WHERE id = %s", (author_id,))
-     row = cursor.fetchone()
-     cursor.close()
-     cursor.close()
+     client = self.__client_factory.get_client()
+     db = client.bookStore
+     result = db.authors.find_one({'_id': ObjectId(author_id)})
      find_author = None
-     if row:
-        find_author = Author(row[1], row[2], row[3], row[4], row[0])
+     client.close()
+     if result:
+        find_author = Author(result.get('name', 'No data'), result.get('email', 'No data'), result.get('phone', 'No data'), result.get('bio', 'No data'))
      return find_author
      
   def getByName(self, author_name: str) -> Author:
-     connect = self.__connection_factory.get_connection()
-     cursor = connect.cursor()
-     cursor.execute("SELECT * FROM authors WHERE name = %s", (author_name,))
-     row = cursor.fetchone()
-     cursor.close()
-     cursor.close()
+     client = self.__client_factory.get_client()
+     db = client.bookStore
+     result = db.authors.find_one({'name': author_name})
      find_author = None
-     if row:
-        find_author = Author(row[1], row[2], row[3], row[4], row[0])
+     client.close()
+     if result:
+        find_author = Author(result.get('name', 'No data'), result.get('email', 'No data'), result.get('phone', 'No data'), result.get('bio', 'No data'))
      return find_author
   
   def getByEmail(self, author_email: str) -> Author:
-     connect = self.__connection_factory.get_connection()
-     cursor = connect.cursor()
-     cursor.execute("SELECT * FROM authors WHERE email = %s", (author_email,))
-     row = cursor.fetchone()
-     cursor.close()
-     cursor.close()
+     client = self.__client_factory.get_client()
+     db = client.bookStore
+     result = db.authors.find_one({'email': author_email})
      find_author = None
-     if row:
-        find_author = Author(row[1], row[2], row[3], row[4], row[0])
+     client.close()
+     if result:
+        find_author = Author(result.get('name', 'No data'), result.get('email', 'No data'), result.get('phone', 'No data'), result.get('bio', 'No data'))
      return find_author
   
   def create_many(self, authors):
-        connect = self.__connection_factory.get_connection()
-        cursor = connect.cursor()
-        cursor.executemany("INSERT INTO authors (name, email, phone, bio) VALUES (%s, %s, %s, %s)", authors)
-        connect.commit()
-        cursor.close()
-        connect.close()
+        client = self.__client_factory.get_client()
+        db = client.bookStore
+        db.authors.insert_many(authors)
+        client.close()

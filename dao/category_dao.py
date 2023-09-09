@@ -11,7 +11,7 @@ class CategoryDAO:
         client = self.__client_factory.get_client()
         db =client.bookStore
         for doc in db.category.find():
-            cat = Category(doc['name'])
+            cat = Category(doc.get('name', 'No data'))
             cat.id = doc['_id']
             categories.append(cat)
         client.close()
@@ -39,7 +39,7 @@ class CategoryDAO:
         result = db.category.find_one({'_id': ObjectId(category_id)})
         client.close()
         if result:
-            find_category = Category(result['name'])
+            find_category = Category(result.get('name', 'No data'))
             find_category.id = result['_id']
         return find_category
 
@@ -50,7 +50,7 @@ class CategoryDAO:
        result = db.category.find_one({'name': category_name})
        client.close()
        if result:
-        find_category = Category(result['name'])
+        find_category = Category(result.get('name', 'No data'))
         find_category.id = result['_id']
        return find_category
     

@@ -1,4 +1,5 @@
 import re
+from bson import ObjectId
 
 def showPhone(phone: str) -> str:
     phone_format = ''
@@ -25,3 +26,17 @@ def showPhone(phone: str) -> str:
 def clearPhone(phone: str) -> str:
     phone_format  = re.sub(r'[-() ]', '', phone)
     return phone_format
+
+def searchToName(method_search, name) -> ObjectId:
+    element = method_search.getByName(name)
+    id = None
+    if element:
+        id = ObjectId(element.id)
+    return id
+
+def searchToId(method_search, id) -> str:
+    element = method_search.getById(id)
+    name = None
+    if element:
+        name = element.name
+    return name

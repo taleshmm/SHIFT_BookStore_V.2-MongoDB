@@ -1,71 +1,58 @@
 from model.book import Book
 from database.client_factory import ClientFactory
-
+from bson import ObjectId
 class BookDAO:
     def __init__(self):
-        self.__connection_factory = ClientFactory()
+        self.__client_factory = ClientFactory()
     
     def getAll(self) -> list[Book]:
-        connect = self.__connection_factory.get_connection()
-        cursor = connect.cursor()
-        cursor.execute("SELECT * FROM books")
-        rows = cursor.fetchall()
-        cursor.close()
-        connect.close()
         books = list()
-        for row in rows:
-            bookRow = Book(row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[0])
-            books.append(bookRow)
+        client = self.__client_factory.get_client()
+        db = client.bookStore
+        for doc in db.books.find():
+            aut = Book(doc.get('title', 'No data'), doc.get('isbn', 'No data'), doc.get('pages', 'No data'), doc.get('year', 'No data'), doc.get('summary', 'No data'), doc.get('category', 'No data'), doc.get('publisher', 'No data'), doc.get('author', 'No data'))
+            aut.id = doc['_id']
+            books.append(aut)
+        client.close()
         return books
     
     def create(self, book: Book) -> None:
-        connect = self.__connection_factory.get_connection()
-        cursor = connect.cursor()
-        cursor.execute("INSERT INTO books (title, isbn, pages, yearBook, summary, category_id, publisher_id, author_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", (book.title, book.isbn, book.pages, book.year, book.summary, book.category, book.editor, book.author))
-        connect.commit()
-        cursor.close()
-        connect.close()
+        client = self.__client_factory.get_client()
+        db = client.bookStore
+        db.books.insert_one({'title': book.title, 'isbn': book.isbn, 'pages': book.pages, 'year': book.year, 'summary': book.summary, 'category': book.category, 'publisher': book.publisher, 'author': book.author})
+        client.close()
 
     def delete(self, id: int) -> bool:
-        connect = self.__connection_factory.get_connection()
-        cursor = connect.cursor()
-        cursor.execute("DELETE FROM books WHERE id = %s", (id,))
-        rows_deleted = cursor.rowcount
-        connect.commit()
-        cursor.close()
-        connect.close()
-        if rows_deleted > 0:
+        client = self.__client_factory.get_client()
+        db = client.bookStore
+        result = db.books.delete_one({'_id': ObjectId(id)})
+        client.close()
+        if result.deleted_count == 1:
             return True
         return False
     
     def getById(self, id: int) -> Book:
-        connect = self.__connection_factory.get_connection()
-        cursor = connect.cursor()
-        cursor.execute("SELECT * FROM books WHERE id = %s", (id,))
-        row = cursor.fetchone()
-        cursor.close()
-        connect.close()
+        client = self.__client_factory.get_client()
+        db = client.bookStore
+        result = db.books.find_one({'_id': ObjectId(id)})
+        client.close()
         book_found = None
-        if row:
-            book_found = Book(row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[0])
+        if result:
+            book_found = Book(result.get('title', 'No data'), result.get('isbn', 'No data'), result.get('pages', 'No data'), result.get('year', 'No data'), result.get('summary', 'No data'), result.get('category', 'No data'), result.get('publisher', 'No data'), result.get('author', 'No data'))
         return book_found
     
     def getByTitle(self, title: str) -> Book:
-       connect = self.__connection_factory.get_connection()
-       cursor = connect.cursor()
-       cursor.execute("SELECT * FROM books   WHERE title = %s", (title,))
-       row = cursor.fetchone()
-       cursor.close()
-       connect.close()
-       book_found = None
-       if row:
-           book_found = Book(row[1], row   [2], row[3], row[4], row[5], row [6], row[7], row[8], row[0])
-       return book_found
+        client = self.__client_factory.get_client()
+        db = client.bookStore
+        result = db.books.find_one({'title': title})
+        client.close()
+        book_found = None
+        if result:
+            book_found = Book(result.get('title', 'No data'), result.get('isbn', 'No data'), result.get('pages', 'No data'), result.get('year', 'No data'), result.get('summary', 'No data'), result.get('category', 'No data'), result.get('publisher', 'No data'), result.get('author', 'No data'))
+        return book_found
    
     def create_many(self, books):
-        connect = self.__connection_factory.get_connection()
-        cursor = connect.cursor()
-        cursor.executemany("INSERT INTO books (title, isbn, pages, yearBook, summary, category_id, publisher_id, author_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", books)
-        connect.commit()
-        cursor.close()
-        connect.close()
+        client = self.__client_factory.get_client()
+        db = client.bookStore
+        db.books.insert_many(books)
+        client.close()

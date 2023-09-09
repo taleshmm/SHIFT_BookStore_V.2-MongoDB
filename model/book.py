@@ -1,10 +1,11 @@
 from .author import Author
 from .category import Category
 from .publisher import Publisher
+from bson import ObjectId
 
 class Book:
-    def __init__(self, title: str, isbn: str, pages: int, year: int,  summary: str, category: Category, publisher: Publisher, author: Author, id: int=0):
-        self.__id: int = id
+    def __init__(self, title: str, isbn: str, pages: int, year: int,  summary: str, category: Category, publisher: Publisher, author: Author):
+        self.__id: ObjectId = None
         self.__title: str = title
         self.__summary: str = summary
         self.__year: int = year
@@ -15,11 +16,11 @@ class Book:
         self.__author: Author = author
 
     @property
-    def id(self) -> int:
+    def id(self) -> ObjectId:
         return self.__id
     
     @id.setter
-    def id(self, id: int):
+    def id(self, id: ObjectId):
         self.__id = id
 
     @property

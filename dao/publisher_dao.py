@@ -11,7 +11,7 @@ class PublisherDAO:
         client = self.__client_factory.get_client()
         db = client.bookStore
         for doc in db.publishers.find():
-            pub = Publisher(doc['name'], doc['address'], doc['phone'])  
+            pub = Publisher(doc.get('name', 'No data'), doc.get('address', 'No data'), doc.get('phone', 'No data'))  
             pub.id = doc['_id'] 
             publishers.append(pub)
         client.close()     
@@ -41,7 +41,7 @@ class PublisherDAO:
        result = db.publishers.find_one({'_id': ObjectId(publisher_id)})
        client.close()
        if result:
-           find_publisher = Publisher(result['name'], result['address'], result['phone'])
+           find_publisher = Publisher(result.get('name', 'No data'), result.get('address', 'No data'), result.get('phone', 'No data'))
            find_publisher.id = result['_id']
        return find_publisher     
     
@@ -52,7 +52,7 @@ class PublisherDAO:
        result = db.publishers.find_one({'name': publisher_name})
        client.close()
        if result:
-           find_publisher = Publisher(result['name'], result['address'], result['phone'])
+           find_publisher = Publisher(result.get('name', 'No data'), result.get('address', 'No data'), result.get('phone', 'No data'))
            find_publisher.id = result['_id']
        return find_publisher     
     

@@ -8,6 +8,7 @@ from model.publisher import Publisher
 from dao.publisher_dao import PublisherDAO
 from utils.csv_processor import read_csv_book, create_csv_book
 from utils.json_processor import read_json_book, create_json_book
+from utils.util import searchToName
 
 class BookService:
     def __init__(self, category_dao: CategoryDAO, publisher_dao: PublisherDAO, author_dao: AuthorDAO):
@@ -69,12 +70,15 @@ class BookService:
          if len(books) == 0:
             print('No books found!')
          for book in books:
+            cat = self.__category_dao.getById(book.category)
+            pub = self.__publisher_dao.getById(book.publisher)
+            aut = self.__author_dao.getById(book.author)
             print(f'''ID: {book.id} | Title: {book.title.title()} | Year: {book.year} | Pages: {book.pages}
    Summary: {book.summary}
    Isbn: {book.isbn}
-   Category: {self.__category_dao.getById(book.category).name.title()}
-   Publisher: {self.__publisher_dao.getById(book.publisher).name.title()}
-   Author: {self.__author_dao.getById(book.author).name.title()}''')
+   Category: {cat.name.title() if cat else 'No data'}
+   Publisher: {pub.name.title() if pub else 'No data'}
+   Author: {aut.name.title() if aut else 'No data'}''')
       except Exception as e:
          print(f'Error displaying books! - {e}')
          return
@@ -95,12 +99,12 @@ class BookService:
          for category in categories:
             print(f'ID: {category.id} | {category.name.capitalize()}')
 
-         id = int(input('Enter the category ID: '))
+         id = input('Enter the category ID: ')
          category_select: Category = self.__category_dao.getById(id)
 
          while category_select is None:
             print('Category does not exist')
-            id = int(input('Enter the category ID: '))
+            id = input('Enter the category ID: ')
             category_select: Category = self.__category_dao.getById(id)
 
          print('\nBook Publishers:')
@@ -108,12 +112,12 @@ class BookService:
          for publisher in publishers:
             print(f'ID {publisher.id} | Name: {publisher.name.capitalize()}')
 
-         id = int(input('Enter the publisher ID: '))
+         id = input('Enter the publisher ID: ')
          publisher_select: Publisher = self.__publisher_dao.getById(id)
 
          while publisher_select is None:
             print('Publisher does not exist')
-            id = int(input('Enter the publisher ID: '))
+            id = input('Enter the publisher ID: ')
             publisher_select: Publisher = self.__publisher_dao.getById(id)
 
          print('\nAuthors:')
@@ -121,12 +125,12 @@ class BookService:
          for author in authors:
             print(f'ID: {author.id} | Name: {author.name.capitalize()}')
 
-         id = int(input('Enter the author ID: '))
+         id = input('Enter the author ID: ')
          author_select: Author = self.__author_dao.getById(id)
 
          while author_select is None:
             print('Author does not exist')
-            id = int(input('Enter the author ID: '))
+            id = input('Enter the author ID: ')
             author_select: Author = self.__author_dao.getById(id)
 
          new_book = Book(title, isbn, year, pages, summary, category_select.id, publisher_select.id, author_select.id)
@@ -140,7 +144,7 @@ class BookService:
     def remove(self):
       print('\nRemoving a book...')
       try:
-         id = int(input("Enter the book ID to delete: "))
+         id = input("Enter the book ID to delete: ")
          if self.__book_dao.delete(id):
             print('Book deleted successfully')
          else:
@@ -153,15 +157,18 @@ class BookService:
     def showById(self):
       print('\nBook by ID...')
       try:
-         id = int(input('Enter the book ID: '))
+         id = input('Enter the book ID: ')
          book = self.__book_dao.getById(id)
          if book is not None:
+            cat = self.__category_dao.getById(book.category)
+            pub = self.__publisher_dao.getById(book.publisher)
+            aut = self.__author_dao.getById(book.author)
             print(f'''ID: {book.id} | Title: {book.title.title()} | Year: {book.year} | Pages: {book.pages}
    Summary: {book.summary}
    Isbn: {book.isbn}
-   Category: {self.__category_dao.getById(book.category).name.title()}
-   Publisher: {self.__publisher_dao.getById(book.publisher).name.title()}
-   Author: {self.__author_dao.getById(book.author).name.title()}''')
+   Category: {cat.name.title() if cat else 'No data'}
+   Publisher: {pub.name.title() if pub else 'No data'}
+   Author: {aut.name.title() if aut else 'No data'}''')
          else:
             print('Book not found.')
       except Exception as e:
@@ -175,12 +182,15 @@ class BookService:
          title = input('Enter the book title: ')
          book = self.__book_dao.getByTitle(title)
          if book is not None:
-            print(f'''ID: {book.id} | Title: {book.title.capitalize()} | Year: {book.year} | Pages: {book.pages}
+            cat = self.__category_dao.getById(book.category)
+            pub = self.__publisher_dao.getById(book.publisher)
+            aut = self.__author_dao.getById(book.author)
+            print(f'''ID: {book.id} | Title: {book.title.title()} | Year: {book.year} | Pages: {book.pages}
    Summary: {book.summary}
    Isbn: {book.isbn}
-   Category: {self.__category_dao.getById(book.category).name.title()}
-   Publisher: {self.__publisher_dao.getById(book.publisher).name.title()}
-   Author: {self.__author_dao.getById(book.author).name.title()}''')
+   Category: {cat.name.title() if cat else 'No data'}
+   Publisher: {pub.name.title() if pub else 'No data'}
+   Author: {aut.name.title() if aut else 'No data'}''')
          else:
             print('Book not found.')
       except Exception as e:
@@ -238,8 +248,9 @@ class BookService:
          list_books = list()
          print('Inserting into the database...\n')
          for bk in books_file:
-            list_books.append((bk.title, bk.isbn, bk.pages, bk.year, bk.summary, bk.category, bk.publisher, bk.author))
+            list_books.append({'title': bk.title, 'isbn': bk.isbn, 'pages': bk.pages, 'year': bk.year, 'summary': bk.summary, 'category': searchToName(self.__category_dao, bk.category), 'publisher': searchToName(self.__publisher_dao, bk.publisher), 'author': searchToName(self.__author_dao, bk.author)})
          self.__book_dao.create_many(list_books)
          print('Data inserted successfully.')
       except Exception as e:
          print(f'Error inserting data into the database - {e}')
+         
